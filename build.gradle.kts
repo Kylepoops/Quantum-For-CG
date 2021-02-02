@@ -1,6 +1,6 @@
-import org.apache.tools.ant.filters.ReplaceTokens
 import com.github.jengelman.gradle.plugins.shadow.ShadowPlugin
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.apache.tools.ant.filters.ReplaceTokens
 import org.checkerframework.gradle.plugin.CheckerFrameworkPlugin
 
 
@@ -47,8 +47,9 @@ subprojects {
     dependencies {
         compileOnlyApi("org.checkerframework:checker-qual:3.5.0")
         compileOnlyApi("com.google.guava:guava:21.0")
-        compileOnly("com.destroystokyo.paper:paper-api:1.16.4-R0.1-SNAPSHOT")
-        compile("io.papermc:paperlib:1.0.6")
+        compileOnly("com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT")
+        compileOnly("io.papermc:paperlib:1.0.6")
+        compileOnly("net.luckperms:api:5.2")
 
         implementation("com.google.inject:guice:5.0.0-BETA-1")
 
@@ -76,7 +77,7 @@ subprojects {
             fun relocates(vararg dependencies: String) {
                 dependencies.forEach {
                     val split = it.split('.')
-                    val name = split.last();
+                    val name = split.last()
                     relocate(it, "${rootProject.group}.dependencies.$name")
                 }
             }

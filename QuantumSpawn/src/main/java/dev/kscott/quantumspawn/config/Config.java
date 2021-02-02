@@ -50,11 +50,6 @@ public class Config {
     private boolean SPAWN_ON_FIRST_JOIN;
 
     /**
-     * Is the per-world cooldown system enabled?
-     */
-    private boolean SPAWN_ON_JOIN;
-
-    /**
      * Is EssentialsX TP integration enabled?
      */
     private boolean SPAWN_ON_DEATH;
@@ -68,6 +63,8 @@ public class Config {
      * Is the default world system enabled?
      */
     private boolean DEFAULT_WORLD_ENABLED;
+
+    private int RESPAWN_RADIUS;
 
     /**
      * The default world to put the player in.
@@ -126,9 +123,9 @@ public class Config {
      */
     private void loadConfigurationValues() {
         this.SPAWN_ON_FIRST_JOIN = this.root.node("spawn").node("spawn-on-join").node("first-join").getBoolean(false);
-        this.SPAWN_ON_JOIN = this.root.node("spawn").node("spawn-on-join").node("on-join").getBoolean(false);
         this.SPAWN_ON_DEATH = this.root.node("spawn").node("spawn-on-death").node("enabled").getBoolean(false);
         this.SPAWN_ON_DEATH_GO_TO_BED = this.root.node("spawn").node("spawn-on-death").node("go-to-bed").getBoolean(false);
+        this.RESPAWN_RADIUS = this.root.node("spawn").node("spawn-on-death").node("respawn-radius").getInt();
         this.DEFAULT_WORLD_ENABLED = this.root.node("spawn").node("default-world").node("enabled").getBoolean(false);
         this.DEFAULT_WORLD = Bukkit.getWorld(this.root.node("spawn").node("default-world").node("world").getString(""));
 
@@ -179,10 +176,6 @@ public class Config {
         return SPAWN_ON_FIRST_JOIN;
     }
 
-    public boolean isSpawnOnJoinEnabled() {
-        return SPAWN_ON_JOIN;
-    }
-
     public boolean isSpawnOnDeathEnabled() {
         return SPAWN_ON_DEATH;
     }
@@ -196,6 +189,10 @@ public class Config {
      */
     public boolean isDefaultWorldEnabled() {
         return DEFAULT_WORLD_ENABLED;
+    }
+
+    public int getRESPAWN_RADIUS() {
+        return RESPAWN_RADIUS;
     }
 
     /**

@@ -1,8 +1,14 @@
 name: QuantumSpawn
-author: bluely (kadenscott)
+author: bluely (kadenscott), Xray_Yang (modified)
 version: @version@
 main: dev.kscott.quantumspawn.QuantumSpawnPlugin
 api-version: 1.16
 description: A comprehensive random spawning plugin using the Quantum API.
 depend:
   - QuantumAPI
+  - LuckPerms
+permissions:
+  sp.x:
+    description: spawnpoint x
+  sp.z:
+    description: spawnpoint z
