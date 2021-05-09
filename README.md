@@ -1,24 +1,36 @@
 # Quantum
 
-Quantum is a random location generator plugin for Minecraft servers running 1.16+. It provides an exhaustive API to allow plugins and users to define their own custom location generation algorithms.
+> _An insanely customizable location generation suite, including /rtp, /wild, random spawns, and more!_ 
 
-As Quantum is intended to be used as an API, there are no user-facing features implemented. Instead of bundlng the logic for the various first-party modules, Quantum is currently split up into three modules: QuantumAPI, QuantumWild, and QuantumSpawn.
+Quantum is a location generation suite for Minecraft 1.16+. It provides an interface (through plugin extensions) to interact with internal location APIs. Quantum can be configured to generate locations under highly customizable criteria, such as:
 
-## QuantumAPI
-- An API for plugins
-- Provides configuration for users to modify rulesets
+- **always** in a forest biome...
+- **never** in a water lake...
+- **always** near a pig...
+- **never** near a zombie...
+- **within** 1000 blocks of 0,0...
+- AND **never** in a cave!
 
-## QuantumSpawn
-- Requires QuamtumAPI
-- Uses rulesets to enable random spawning mechanics
+These are only a few of the many possibilities Quantum's advanced configuration offers. Quantum is very adaptable, and can (and is!) used by many types of servers: Factions, minigames, PvP, and more. Quantum's documentation is constantly growing, so make sure to check out the wiki page and the [Discord server](https://chat.ksc.sh)!
 
-QuantumSpawn is still in development, but you can read more [here](#).
+## Modules
 
-## QuantumWild
-- Requires QuantumAPI
-- Provides /wild commands with configurable cooldown & per-world options
+### QuantumAPI
 
-QuantumWild is still in development, but you can read more [here](#).
+- An API for plugins.
+- Provides configuration for users to modify rulesets.
+
+### QuantumSpawn
+
+- Requires QuantumAPI.
+- Uses rulesets to enable random spawning mechanics.
+
+### QuantumWild
+
+- Requires QuantumAPI.
+- Provides /wild commands with configurable cooldown & per-world options.
+
+> Keep in mind, these modules often receive updates bringing more features. See the wiki page and my Discord server to get the latest information. 
 
 ## Features
 
@@ -30,8 +42,9 @@ Here's a break down of Quantum's main selling points:
 
 ## Notes on Compiling
 
-To compile, you must have access to the [FactionsUUID jar](https://www.spigotmc.org/resources/factionsuuid.1035/). Please download it, and put it in `{project_root}/libs/Factions.jar`.
-    
+To compile, you must have access to the [FactionsUUID jar](https://www.spigotmc.org/resources/factionsuuid.1035/).
+Please download it, and put it in `{project_root}/libs/Factions.jar`.
+
 ## Credits
 
 Thanks to [Kyori](https://github.com/KyoriPowered) for the adventure text library.

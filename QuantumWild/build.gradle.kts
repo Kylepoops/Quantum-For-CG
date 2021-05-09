@@ -1,5 +1,10 @@
 repositories {
     mavenLocal()
+
+    maven {
+        name = "EssentialsX"
+        url = uri("https://repo.essentialsx.net/snapshots/")
+    }
 }
 
 dependencies {
@@ -12,4 +17,9 @@ dependencies {
     compileOnly("net.kyori:adventure-text-minimessage:4.1.0-SNAPSHOT")
 
     compileOnly("cloud.commandframework:cloud-paper:1.4.0")
+    implementation("cloud.commandframework:cloud-minecraft-extras:1.4.0")
+
+    compileOnly("net.luckperms:api:5.2")
+
+    compileOnly("net.essentialsx:EssentialsX:2.19.0-SNAPSHOT")
 }

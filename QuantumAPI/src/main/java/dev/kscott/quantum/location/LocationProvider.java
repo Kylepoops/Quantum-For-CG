@@ -241,7 +241,7 @@ public class LocationProvider {
     /**
      * Validates a Location against a ruleset.
      *
-     * @param location Location to validate.
+     * @param location       Location to validate.
      * @param quantumRuleset Ruleset to validate with.
      * @return A CompletableFuture of Boolean, where the boolean is true if the location is valid, false if not.
      */

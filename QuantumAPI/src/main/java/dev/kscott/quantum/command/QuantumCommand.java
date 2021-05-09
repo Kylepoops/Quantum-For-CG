@@ -1,8 +1,8 @@
 package dev.kscott.quantum.command;
 
+import cloud.commandframework.ArgumentDescription;
 import cloud.commandframework.Command;
 import cloud.commandframework.CommandManager;
-import cloud.commandframework.Description;
 import cloud.commandframework.arguments.CommandArgument;
 import cloud.commandframework.arguments.standard.StringArgument;
 import cloud.commandframework.context.CommandContext;
@@ -11,7 +11,6 @@ import dev.kscott.quantum.config.Config;
 import dev.kscott.quantum.location.LocationProvider;
 import dev.kscott.quantum.location.QuantumLocation;
 import dev.kscott.quantum.location.QuantumTimer;
-import dev.kscott.quantum.rule.QuantumRule;
 import dev.kscott.quantum.rule.RuleRegistry;
 import dev.kscott.quantum.rule.rules.async.AsyncQuantumRule;
 import dev.kscott.quantum.rule.ruleset.QuantumRuleset;
@@ -22,9 +21,7 @@ import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -32,8 +29,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.util.*;
-import java.util.stream.Collector;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 import java.util.stream.Collectors;
 
 /**
@@ -134,7 +133,7 @@ public class QuantumCommand {
         this.commandManager.command(
                 builder.literal(
                         "rulesets",
-                        Description.of("Get the ids of all loaded rulesets")
+                        ArgumentDescription.of("Get the ids of all loaded rulesets")
                 )
                         .permission("quantum.api.command.rulesets")
                         .handler(this::handleRulesets)
@@ -143,7 +142,7 @@ public class QuantumCommand {
         this.commandManager.command(
                 builder.literal(
                         "rules",
-                        Description.of("Get the ids all loaded rules")
+                        ArgumentDescription.of("Get the ids all loaded rules")
                 )
                         .permission("quantum.api.command.rules")
                         .handler(this::handleRules)
@@ -152,7 +151,7 @@ public class QuantumCommand {
         this.commandManager.command(
                 builder.literal(
                         "stats",
-                        Description.of("See Quantum's performance")
+                        ArgumentDescription.of("See Quantum's performance")
                 )
                         .permission("quantum.api.command.stats")
                         .handler(this::handleStats)
@@ -161,7 +160,7 @@ public class QuantumCommand {
         this.commandManager.command(
                 builder.literal(
                         "reload",
-                        Description.of("Reloads Quantum reload")
+                        ArgumentDescription.of("Reloads Quantum reload")
                 )
                         .permission("quantum.api.command.reload")
                         .handler(this::handleReload)
@@ -170,7 +169,7 @@ public class QuantumCommand {
         this.commandManager.command(
                 builder.literal(
                         "queue",
-                        Description.of("Shows QuantumAPI queue stats")
+                        ArgumentDescription.of("Shows QuantumAPI queue stats")
                 )
                         .permission("quantum.api.command.queue")
                         .handler(this::handleQueue)
@@ -185,7 +184,7 @@ public class QuantumCommand {
         this.commandManager.command(
                 builder.literal(
                         "validate",
-                        Description.of("Validates a location with a given ruleset")
+                        ArgumentDescription.of("Validates a location with a given ruleset")
                 )
                         .permission("quantum.api.command.validate")
                         .argument(rulesetArg)
@@ -222,7 +221,8 @@ public class QuantumCommand {
 
         final TextComponent.Builder component = Component.text()
                 .append(this.config.PREFIX)
-                .append(MiniMessage.get().parse(" <gray>Quantum v<aqua>" + version + "</aqua></gray>"));
+                .append(MiniMessage.get().parse(" <gray>Quantum v<aqua>" + version + "</aqua></gray>"))
+                .append(MiniMessage.get().parse(" <gray>Join the support Discord @ <aqua>chat.ksc.sh</aqua>!</gray>"));
 
         bukkitAudiences.sender(sender).sendMessage(component);
     }
@@ -328,7 +328,7 @@ public class QuantumCommand {
         for (final Map.Entry<QuantumRuleset, Queue<QuantumLocation>> locationEntry : locationMap.entrySet()) {
             final TextComponent.Builder component = Component.text()
                     .append(this.config.PREFIX)
-                    .append(MiniMessage.get().parse(" <aqua>"+locationEntry.getKey().getId()+"</aqua> <gray>has <aqua>"+locationEntry.getValue().size()+"</aqua> queued locations.</gray>"));
+                    .append(MiniMessage.get().parse(" <aqua>" + locationEntry.getKey().getId() + "</aqua> <gray>has <aqua>" + locationEntry.getValue().size() + "</aqua> queued locations.</gray>"));
 
             audience.sendMessage(component);
         }
@@ -359,7 +359,7 @@ public class QuantumCommand {
         if (ruleset == null) {
             final TextComponent.Builder component = Component.text()
                     .append(this.config.PREFIX)
-                    .append(MiniMessage.get().parse(" <red>There is no ruleset with the id <yellow>"+rulesetId+"</yellow></red>"));
+                    .append(MiniMessage.get().parse(" <red>There is no ruleset with the id <yellow>" + rulesetId + "</yellow></red>"));
             audience.sendMessage(component);
             return;
         }
@@ -367,8 +367,7 @@ public class QuantumCommand {
         final @NonNull Location location = player.getLocation();
 
         this.locationProvider.validateLocation(location, ruleset)
-            .thenAccept(valid -> {
-                new BukkitRunnable() {
+                .thenAccept(valid -> new BukkitRunnable() {
                     @Override
                     public void run() {
                         final TextComponent.Builder component = Component.text()
@@ -376,8 +375,7 @@ public class QuantumCommand {
                                 .append(MiniMessage.get().parse(valid ? " <aqua>This location is valid.</aqua>" : " <red>This location is not valid.</red>"));
                         audience.sendMessage(component);
                     }
-                }.runTask(plugin);
-            });
+                }.runTask(plugin));
 
     }
 

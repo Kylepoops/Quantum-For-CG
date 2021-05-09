@@ -9,7 +9,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.util.HashSet;
 import java.util.Set;
 
-public class AvoidBiomeRule extends AsyncQuantumRule{
+public class AvoidBiomeRule extends AsyncQuantumRule {
 
 
     /**
@@ -23,10 +23,6 @@ public class AvoidBiomeRule extends AsyncQuantumRule{
     public AvoidBiomeRule() {
         super(new BiomeListOption());
     }
-
-    /**
-     * Parses BiomeListOption into {@link AvoidBiomeRule#biomes}
-     */
 
     /**
      * Loads {@link this#biomes}

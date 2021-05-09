@@ -9,7 +9,6 @@ import dev.kscott.quantum.rule.QuantumRule;
 import dev.kscott.quantum.rule.RuleRegistry;
 import dev.kscott.quantum.rule.option.QuantumRuleOption;
 import dev.kscott.quantum.rule.rules.async.AvoidAirRule;
-import dev.kscott.quantum.rule.rules.async.AvoidBlockRule;
 import dev.kscott.quantum.rule.ruleset.QuantumRuleset;
 import dev.kscott.quantum.rule.ruleset.RulesetRegistry;
 import dev.kscott.quantum.rule.ruleset.search.SearchArea;
@@ -248,7 +247,7 @@ public class Config {
                     ConfigurationNode optionValue = optionEntry.getValue();
 
                     if (!(optionKey instanceof String)) {
-                        this.plugin.getLogger().severe("Error loading a rule (key was not a string): " + key.toString());
+                        this.plugin.getLogger().severe("Error loading a rule (key was not a string): " + key);
                         continue;
                     }
 

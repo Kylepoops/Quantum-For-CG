@@ -22,6 +22,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Listens on player death-related events.
+ */
 public class PlayerDeathListener implements Listener {
 
     /**
@@ -55,9 +58,15 @@ public class PlayerDeathListener implements Listener {
         this.locationProvider = locationProvider;
     }
 
+    /**
+     * Handles the {@link PlayerRespawnEvent} and teleports them if enabled.
+     *
+     * @param event {@link PlayerRespawnEvent}.
+     */
     @EventHandler
     public void onRespawn(PlayerRespawnEvent event) {
         final @NonNull Player player = event.getPlayer();
+
         if (!player.hasPlayedBefore()) {
             return;
         }
