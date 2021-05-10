@@ -84,7 +84,7 @@ public class Lang {
         @Nullable String value;
 
         if (root != null) {
-            value = root.node(key.split("\\.")).getString();
+            value = root.node((Object) key.split("\\.")).getString();
         } else {
             value = "<red>ERR: No lang key found for " + key + "</red>";
         }

@@ -1,6 +1,7 @@
 package dev.kscott.quantum.location.locator;
 
 import org.bukkit.ChunkSnapshot;
+import org.bukkit.Material;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 /**
@@ -39,26 +40,16 @@ public class RangeYLocator implements YLocator {
     public int getValidY(@NonNull ChunkSnapshot snapshot, int x, int z) {
         // TODO Change hard bound limits for 1.17+
         if (maxY > minY) {
-            for (int y = minY; y <= maxY; y++) {
-                boolean yBelowSafe;
+            for (int y = maxY; y >= minY; y--) {
+                Material yBelow = snapshot.getBlockType(x, y - 1, z);
 
+                if (yBelow == Material.LAVA || yBelow == Material.WATER || yBelow == Material.BUBBLE_COLUMN) {
+                    return -1;
+                }
+
+                //noinspection StatementWithEmptyBody
                 if (y - 1 < 0) {
-                    yBelowSafe = false;
-                } else {
-                    yBelowSafe = snapshot.getBlockType(x, y - 1, z).isSolid();
-                }
-
-                final boolean yClear = snapshot.getBlockType(x, y, z).isAir();
-
-                boolean yAboveClear;
-
-                if (y + 1 > 255) {
-                    yAboveClear = true;
-                } else {
-                    yAboveClear = snapshot.getBlockType(x, y + 1, z).isAir();
-                }
-
-                if (yClear && yAboveClear && yBelowSafe) {
+                } else if (yBelow.isSolid()) {
                     return y;
                 }
             }
