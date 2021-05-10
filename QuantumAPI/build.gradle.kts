@@ -17,7 +17,7 @@ dependencies {
 
     // integrations
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.4")
-    compileOnly("com.massivecraft:Factions:1.6.9.5-U0.5.20")
+    compileOnly("com.massivecraft:Factions:1.6.9.5-U0.5.21")
     compileOnly("org.kitteh:paste-gg-api") {
         version {
             strictly("0.9.0")
