@@ -157,7 +157,7 @@ public class LocationProvider {
      * @param MaxZ           area where quantum find location in
      * @param MinZ           area where quantum find location in
      */
-    protected void findLocation(final int tries, final long start, final @NonNull QuantumRuleset quantumRuleset, final @NonNull CompletableFuture<QuantumLocation> cf, int MaxX, int MinX, int MaxZ, int MinZ) {
+    public void findLocation(final int tries, final long start, final @NonNull QuantumRuleset quantumRuleset, final @NonNull CompletableFuture<QuantumLocation> cf, int MaxX, int MinX, int MaxZ, int MinZ) {
 
         if (this.config.getMaxRetries() <= tries) {
             cf.completeExceptionally(new ExceededMaxRetriesException());

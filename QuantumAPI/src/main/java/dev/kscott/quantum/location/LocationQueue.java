@@ -124,7 +124,4 @@ public class LocationQueue {
         return ImmutableMap.copyOf(this.locationQueueMap);
     }
 
-    public void clearLocations() {
-        this.locationQueueMap.clear();
-    }
 }

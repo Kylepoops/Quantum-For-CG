@@ -111,7 +111,7 @@ public class PlayerJoinListener implements Listener {
                 try {
                     int x = (int) location.getX();
                     int z = (int) location.getZ();
-                    plugin.getLogger().info("Generating MetaDate for " + playerName + ": X=" + x + "; Z=" + z);
+                    plugin.getLogger().info("Generating MetaDate for " + playerName + ": {X=" + x + ", Z=" + z + "}");
                     respLoc.put(player.getName(), new RespLoc(x, z));
                     user.data().add(Node.builder("meta.x." + x).build());
                     user.data().add(Node.builder("meta.z." + z).build());

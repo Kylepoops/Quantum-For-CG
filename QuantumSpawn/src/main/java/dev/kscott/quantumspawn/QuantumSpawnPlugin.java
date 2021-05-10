@@ -22,14 +22,6 @@ public final class QuantumSpawnPlugin extends JavaPlugin {
 
     static RegisteredServiceProvider<LuckPerms> lpProvider = null;
 
-    public static RegisteredServiceProvider<LuckPerms> getLpProvider() {
-        return lpProvider;
-    }
-
-    private @NonNull Config loadConfig(final @NonNull Injector injector) {
-        return injector.getInstance(Config.class);
-    }
-
     @Override
     public void onEnable() {
         final @NonNull Injector injector = Guice.createInjector(
@@ -54,5 +46,13 @@ public final class QuantumSpawnPlugin extends JavaPlugin {
 
 
         new Metrics(this, 9727);
+    }
+
+    public static RegisteredServiceProvider<LuckPerms> getLpProvider() {
+        return lpProvider;
+    }
+
+    private @NonNull Config loadConfig(final @NonNull Injector injector) {
+        return injector.getInstance(Config.class);
     }
 }
