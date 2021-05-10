@@ -1,6 +1,6 @@
 rootProject.name = "Quantum"
 
-listOf("API", "Spawn", "Wild").forEach {
+listOf("API", "Spawn").forEach {
     include(":Quantum$it")
     project(":Quantum$it").projectDir = file("Quantum$it")
 }
