@@ -65,10 +65,8 @@ public class PlayerJoinListener implements Listener {
         LuckPerms api = provider.getProvider();
         User user = api.getPlayerAdapter(Player.class).getUser(player);
 
-        LuckPermsProcessor luckPermsProcessor = QuantumSpawnPlugin.getLuckPermsProcessor();
-
-        if (luckPermsProcessor.isFirstJoin(player)) {
-            luckPermsProcessor.loadLocation(player);
+        if (LuckPermsProcessor.isFirstJoin(player)) {
+            LuckPermsProcessor.loadLocation(player);
             return;
         }
 
@@ -95,7 +93,7 @@ public class PlayerJoinListener implements Listener {
                 player.teleportAsync(QuantumLocation.toCenterHorizontalLocation(location));
                 int x = (int) location.getX();
                 int z = (int) location.getZ();
-                luckPermsProcessor.buildMateData(player, x, z);
+                LuckPermsProcessor.buildMateData(player, x, z);
             }
         }.runTask(plugin));
     }

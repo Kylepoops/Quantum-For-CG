@@ -16,26 +16,21 @@ import java.util.Map;
 import java.util.Objects;
 
 public class LuckPermsProcessor {
-    private final @NonNull RegisteredServiceProvider<LuckPerms> provider;
-    private final LuckPerms api;
-    private final JavaPlugin plugin;
-    Map<String,RespawnLocation> respawnLocationMap = new HashMap<>();
-    LuckPermsProcessor() {
-        provider = QuantumSpawnPlugin.getLpProvider();
-        api = provider.getProvider();
-        plugin =  QuantumSpawnPlugin.getPlugin();
-    }
+    private final static @NonNull RegisteredServiceProvider<LuckPerms> provider = QuantumSpawnPlugin.getLpProvider();
+    private final static LuckPerms api =provider.getProvider();
+    private final static JavaPlugin plugin = QuantumSpawnPlugin.getPlugin();
+    private final static Map<String,RespawnLocation> respawnLocationMap = new HashMap<>();
 
     public static Map<String, RespawnLocation> getRespawnMap() {
-        return respawnLocation;
+        return respawnLocationMap;
     }
 
-    public boolean isFirstJoin(Player player) {
+    public static boolean isFirstJoin(Player player) {
         User user = api.getPlayerAdapter(Player.class).getUser(player);
         return player.hasPermission("sp.hasLocation");
     }
 
-    public void loadLocation(Player player) {
+    public static void loadLocation(Player player) {
         String playerName = player.getName();
         User user = api.getPlayerAdapter(Player.class).getUser(player);
         RespawnLocation respawnLocation = null;
@@ -49,7 +44,8 @@ public class LuckPermsProcessor {
         }
     }
 
-    public void buildMateData(Player player, int x, int z) {
+    public static void buildMateData(Player player, int x, int z) {
+        String playerName = player.getName();
         try {
             User user = api.getPlayerAdapter(Player.class).getUser(player);
             plugin.getLogger().info("Generating MetaDate for " + playerName + ": {X=" + x + ", Z=" + z + "}");

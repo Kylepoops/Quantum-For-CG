@@ -66,7 +66,7 @@ public class PlayerDeathListener implements Listener {
         final @NonNull String playerName = player.getName();
 
 
-        if (!player.hasPlayedBefore()) {
+        if (LuckPermsProcessor.isFirstJoin(player)) {
             return;
         }
 
