@@ -24,7 +24,7 @@ public class SqliteProcessor implements DataBaseProcessor {
         hikariConfig.setMinimumIdle(config.getMinimumIdle());
         hikariConfig.setMaximumPoolSize(config.getMaximumPoolSize());
 
-        String URL = "jdbc:sqlite:" + QuantumSpawnPlugin.getPlugin().getDataFolder().getAbsolutePath() + "database.db";
+        String URL = "jdbc:sqlite:" + QuantumSpawnPlugin.getPlugin().getDataFolder().getAbsolutePath() + "/database.db";
         hikariConfig.setJdbcUrl(URL);
 
         hikariConfig.setAutoCommit(true);
@@ -42,12 +42,13 @@ public class SqliteProcessor implements DataBaseProcessor {
 
     public void checkDatabase() {
         try (Connection connection = getConnection()) {
-            String sql = "CREATE TABLE location (player TEXT, x int, z int) IF NOT EXISTS";
+            String sql = "CREATE TABLE IF NOT EXISTS location (player TEXT, x int, z int)";
             try (PreparedStatement ps = connection.prepareStatement(sql)) {
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
             QuantumSpawnPlugin.getPlugin().getLogger().warning("Failed to check database");
+            e.printStackTrace();
         }
 
     }
@@ -56,7 +57,7 @@ public class SqliteProcessor implements DataBaseProcessor {
         ResultSet rs;
         String playerName = player.getName();
         try (Connection connection = getConnection()) {
-            String sql = "SELECT * FROM location WHERE player = '?'";
+            String sql = "SELECT * FROM location WHERE player = ?";
             try (PreparedStatement psmt = connection.prepareStatement(sql)) {
                 psmt.setString(1, playerName);
                 rs = psmt.executeQuery();
@@ -75,12 +76,13 @@ public class SqliteProcessor implements DataBaseProcessor {
     public void buildData(Player player, int x, int z) {
         String playerName = player.getName();
         try (Connection connection = getConnection()) {
-            String sql = "INSERT INTO location (TEXT, INTEGER, INTEGER) VALUES (?,?,?)";
+            String sql = "INSERT INTO location (player, x, z) VALUES (?,?,?)";
             try (PreparedStatement psmt = connection.prepareStatement(sql)) {
                 psmt.setString(1, playerName);
                 psmt.setInt(2, x);
                 psmt.setInt(3, z);
                 psmt.executeUpdate();
+                respawnLocationMap.put(playerName,new RespawnLocation(x,z));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
