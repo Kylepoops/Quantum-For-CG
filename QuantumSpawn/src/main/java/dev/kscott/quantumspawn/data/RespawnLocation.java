@@ -1,10 +1,10 @@
 package dev.kscott.quantumspawn.data;
 
-public class RespLoc {
+public class RespawnLocation {
     int x;
     int z;
 
-    public RespLoc(int x, int z) {
+    public RespawnLocation(int x, int z) {
         this.x = x;
         this.z = z;
     }

@@ -5,7 +5,7 @@ import dev.kscott.quantum.location.LocationProvider;
 import dev.kscott.quantum.location.QuantumLocation;
 import dev.kscott.quantum.rule.ruleset.QuantumRuleset;
 import dev.kscott.quantumspawn.config.Config;
-import dev.kscott.quantumspawn.data.RespLoc;
+import dev.kscott.quantumspawn.data.RespawnLocation;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -73,10 +73,10 @@ public class PlayerDeathListener implements Listener {
             return;
         }
 
-        RespLoc resploc = PlayerJoinListener.getRespawnMap().get(playerName);
+        RespawnLocation respawnLocation = PlayerJoinListener.getRespawnMap().get(playerName);
 
-        final int x = resploc.getX();
-        final int z = resploc.getZ();
+        final int x = respawnLocation.getX();
+        final int z = respawnLocation.getZ();
 
 
         int Respawn_Radius = config.getRESPAWN_RADIUS();

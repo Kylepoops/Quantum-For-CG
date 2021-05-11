@@ -6,7 +6,7 @@ import dev.kscott.quantum.location.QuantumLocation;
 import dev.kscott.quantum.rule.ruleset.QuantumRuleset;
 import dev.kscott.quantumspawn.QuantumSpawnPlugin;
 import dev.kscott.quantumspawn.config.Config;
-import dev.kscott.quantumspawn.data.RespLoc;
+import dev.kscott.quantumspawn.data.RespawnLocation;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.Node;
@@ -30,7 +30,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class PlayerJoinListener implements Listener {
 
-    private static final Map<String, RespLoc> respLoc = new HashMap<>();
+    private static final Map<String, RespawnLocation> respawnLocation = new HashMap<>();
     /**
      * Config reference.
      */
@@ -62,8 +62,8 @@ public class PlayerJoinListener implements Listener {
         this.locationProvider = locationProvider;
     }
 
-    public static Map<String, RespLoc> getRespawnMap() {
-        return respLoc;
+    public static Map<String, RespawnLocation> getRespawnMap() {
+        return respawnLocation;
     }
 
     @EventHandler
@@ -79,7 +79,7 @@ public class PlayerJoinListener implements Listener {
             try {
                 int x = Integer.parseInt(Objects.requireNonNull(user.getCachedData().getMetaData().getMetaValue("x")));
                 int z = Integer.parseInt(Objects.requireNonNull(user.getCachedData().getMetaData().getMetaValue("z")));
-                respLoc.put(playerName, new RespLoc(x, z));
+                respawnLocation.put(playerName, new RespawnLocation(x, z));
                 return;
             } catch (NullPointerException ex) {
                 Bukkit.getLogger().info("Player" + playerName + "has sp.hasLocation but don't have MetaData");
@@ -112,7 +112,7 @@ public class PlayerJoinListener implements Listener {
                     int x = (int) location.getX();
                     int z = (int) location.getZ();
                     plugin.getLogger().info("Generating MetaDate for " + playerName + ": {X=" + x + ", Z=" + z + "}");
-                    respLoc.put(player.getName(), new RespLoc(x, z));
+                    respawnLocation.put(player.getName(), new RespawnLocation(x, z));
                     user.data().add(Node.builder("meta.x." + x).build());
                     user.data().add(Node.builder("meta.z." + z).build());
                     user.data().add(Node.builder("sp.hasLocation").build());

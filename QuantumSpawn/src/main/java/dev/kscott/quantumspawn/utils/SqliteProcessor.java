@@ -6,11 +6,12 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import dev.kscott.quantumspawn.QuantumSpawnPlugin;
 import dev.kscott.quantumspawn.config.Config;
-import dev.kscott.quantumspawn.data.RespLoc;
+import dev.kscott.quantumspawn.data.RespawnLocation;
 import dev.kscott.quantumspawn.inject.ConfigModule;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class SqliteProcessor {
@@ -42,7 +43,7 @@ public class SqliteProcessor {
         }
     }
 
-    public void createDB() {
+    public void createDatabase() {
         try (Connection connection = getConnection()) {
             String sql = "CREATE TABLE location (player TEXT, x int, z int)";
             try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -54,14 +55,22 @@ public class SqliteProcessor {
 
     }
 
-    public RespLoc getRespLoc() {
+    public RespawnLocation getRespawnLocation(String playerName) {
+        ResultSet rs;
         try (Connection connection = getConnection()) {
-            String sql = ""
+            String sql = "SELECT * where player = " + playerName;
             try (PreparedStatement psmt = connection.prepareStatement(sql)) {
-                //TODO
+                rs = psmt.executeQuery();
+                if (rs.next()) {
+                    RespawnLocation respawnLocation = new RespawnLocation(rs.getInt("x"), rs.getInt("z"));
+                    return respawnLocation;
+                } else {
+                    return null;
+                }
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
+            return null;
         }
     }
 }
