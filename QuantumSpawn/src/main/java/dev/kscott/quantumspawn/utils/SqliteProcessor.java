@@ -1,13 +1,10 @@
 package dev.kscott.quantumspawn.utils;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import dev.kscott.quantumspawn.QuantumSpawnPlugin;
 import dev.kscott.quantumspawn.config.Config;
 import dev.kscott.quantumspawn.data.RespawnLocation;
-import dev.kscott.quantumspawn.inject.ConfigModule;
 import org.bukkit.entity.Player;
 
 import java.sql.Connection;
@@ -18,8 +15,7 @@ import java.sql.SQLException;
 public class SqliteProcessor implements DataBaseProcessor {
     private static HikariDataSource sqlConnectionPool;
     public static void setSqlConnectionPoll() {
-        final Injector injector = Guice.createInjector(new ConfigModule());
-        final Config config = injector.getInstance(Config.class);
+        final Config config = QuantumSpawnPlugin.getSpawnConfig();
 
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setDriverClassName("org.sqlite.JDBC");

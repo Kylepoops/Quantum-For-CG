@@ -16,10 +16,14 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.util.Objects;
+
 /**
  * The QuantumSpawnPlugin.
  */
 public final class QuantumSpawnPlugin extends JavaPlugin {
+
+    static Config config;
 
     static RegisteredServiceProvider<LuckPerms> lpProvider = null;
 
@@ -31,6 +35,8 @@ public final class QuantumSpawnPlugin extends JavaPlugin {
         return lpProvider;
     }
 
+    public static Config getSpawnConfig() { return config; }
+
     @Override
     public void onEnable() {
         final @NonNull Injector injector = Guice.createInjector(
@@ -41,7 +47,7 @@ public final class QuantumSpawnPlugin extends JavaPlugin {
 
         lpProvider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
 
-        final @NonNull Config config = loadConfig(injector);
+        config = Objects.requireNonNull(loadConfig(injector));
 
         if (config.isSpawnOnFirstJoinEnabled()) {
             this.getServer().getPluginManager().registerEvents(injector.getInstance(PlayerJoinListener.class), this);
