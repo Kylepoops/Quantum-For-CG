@@ -66,6 +66,11 @@ public class Config {
 
     private int RESPAWN_RADIUS;
 
+    private String DBTYPE;
+    private long connectionTimeout;
+    private int minimumIdle;
+    private int maximumPoolSize;
+
     /**
      * The default world to put the player in.
      */
@@ -127,6 +132,13 @@ public class Config {
         this.SPAWN_ON_DEATH_GO_TO_BED = this.root.node("spawn").node("spawn-on-death").node("go-to-bed").getBoolean(false);
         this.RESPAWN_RADIUS = this.root.node("spawn").node("spawn-on-death").node("respawn-radius").getInt();
         this.DEFAULT_WORLD_ENABLED = this.root.node("spawn").node("default-world").node("enabled").getBoolean(false);
+
+        this.DBTYPE = this.root.node("database").node("dbtype").getString("sqlite");
+        this.connectionTimeout = this.root.node("database").node("hikariConfig").node("connectionTimeout").getLong(30000);
+        this.minimumIdle = this.root.node("database").node("hikariConfig").node("minimunIdle").getInt(10);
+        this.maximumPoolSize = this.root.node("database").node("hikariConfig").node("maximumPollSize").getInt(50);
+
+
         this.DEFAULT_WORLD = Bukkit.getWorld(this.root.node("spawn").node("default-world").node("world").getString(""));
 
         if (this.DEFAULT_WORLD_ENABLED && this.DEFAULT_WORLD == null) {
@@ -193,6 +205,22 @@ public class Config {
 
     public int getRESPAWN_RADIUS() {
         return RESPAWN_RADIUS;
+    }
+
+    public String getDBTYPE() {
+        return DBTYPE;
+    }
+
+    public long getConnectionTimeout() {
+        return connectionTimeout;
+    }
+
+    public int getMinimumIdle() {
+        return minimumIdle;
+    }
+
+    public int getMaximumPoolSize() {
+        return maximumPoolSize;
     }
 
     /**

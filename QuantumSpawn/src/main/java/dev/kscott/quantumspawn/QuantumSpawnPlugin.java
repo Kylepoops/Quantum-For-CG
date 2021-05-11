@@ -8,6 +8,7 @@ import dev.kscott.quantumspawn.inject.PluginModule;
 import dev.kscott.quantumspawn.inject.QuantumModule;
 import dev.kscott.quantumspawn.listeners.PlayerDeathListener;
 import dev.kscott.quantumspawn.listeners.PlayerJoinListener;
+import dev.kscott.quantumspawn.utils.SqliteProcessor;
 import net.luckperms.api.LuckPerms;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -21,6 +22,14 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 public final class QuantumSpawnPlugin extends JavaPlugin {
 
     static RegisteredServiceProvider<LuckPerms> lpProvider = null;
+
+    public static JavaPlugin getPlugin() {
+        return JavaPlugin.getPlugin(QuantumSpawnPlugin.class);
+    }
+
+    public static RegisteredServiceProvider<LuckPerms> getLpProvider() {
+        return lpProvider;
+    }
 
     @Override
     public void onEnable() {
@@ -44,12 +53,10 @@ public final class QuantumSpawnPlugin extends JavaPlugin {
             this.getLogger().info("Random spawn on death is enabled!");
         }
 
+        SqliteProcessor.setSqlConnectionPoll();
+
 
         new Metrics(this, 9727);
-    }
-
-    public static RegisteredServiceProvider<LuckPerms> getLpProvider() {
-        return lpProvider;
     }
 
     private @NonNull Config loadConfig(final @NonNull Injector injector) {
