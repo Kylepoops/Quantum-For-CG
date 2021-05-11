@@ -6,9 +6,11 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import dev.kscott.quantumspawn.QuantumSpawnPlugin;
 import dev.kscott.quantumspawn.config.Config;
+import dev.kscott.quantumspawn.data.RespLoc;
 import dev.kscott.quantumspawn.inject.ConfigModule;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class SqliteProcessor {
@@ -37,6 +39,29 @@ public class SqliteProcessor {
         } catch (SQLException e) {
             QuantumSpawnPlugin.getPlugin().getLogger().warning("Failed to connect to database");
             return null;
+        }
+    }
+
+    public void createDB() {
+        try (Connection connection = getConnection()) {
+            String sql = "CREATE TABLE location (player TEXT, x int, z int)";
+            try (PreparedStatement ps = connection.prepareStatement(sql)) {
+                ps.executeUpdate();
+            }
+        } catch (SQLException e) {
+            QuantumSpawnPlugin.getPlugin().getLogger().warning("Failed to create table");
+        }
+
+    }
+
+    public RespLoc getRespLoc() {
+        try (Connection connection = getConnection()) {
+            String sql = ""
+            try (PreparedStatement psmt = connection.prepareStatement(sql)) {
+                //TODO
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
 }
