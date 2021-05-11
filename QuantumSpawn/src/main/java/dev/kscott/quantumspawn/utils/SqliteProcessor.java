@@ -18,13 +18,13 @@ public class SqliteProcessor {
         final Config config = injector.getInstance(Config.class);
 
         HikariConfig hikariConfig = new HikariConfig();
-        hikariConfig.setDriverClassName("org.xerial.jdbc.Driver");
+        hikariConfig.setDriverClassName("org.sqlite.JDBC");
 
         hikariConfig.setConnectionTimeout(config.getConnectionTimeout());
         hikariConfig.setMinimumIdle(config.getMinimumIdle());
         hikariConfig.setMaximumPoolSize(config.getMaximumPoolSize());
 
-        String URL = "jdbc:sqlite://" + QuantumSpawnPlugin.getPlugin().getDataFolder().toString();
+        String URL = "jdbc:sqlite:" + QuantumSpawnPlugin.getPlugin().getDataFolder().getAbsolutePath() + "database.db";
         hikariConfig.setJdbcUrl(URL);
 
         hikariConfig.setAutoCommit(true);
