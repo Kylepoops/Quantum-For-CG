@@ -58,12 +58,11 @@ public class SqliteProcessor {
     public RespawnLocation getRespawnLocation(String playerName) {
         ResultSet rs;
         try (Connection connection = getConnection()) {
-            String sql = "SELECT * where player = " + playerName;
+            String sql = "SELECT * FROM location WHERE player = '" + playerName + "'";
             try (PreparedStatement psmt = connection.prepareStatement(sql)) {
                 rs = psmt.executeQuery();
                 if (rs.next()) {
-                    RespawnLocation respawnLocation = new RespawnLocation(rs.getInt("x"), rs.getInt("z"));
-                    return respawnLocation;
+                    return new RespawnLocation(rs.getInt("x"), rs.getInt("z"));
                 } else {
                     return null;
                 }

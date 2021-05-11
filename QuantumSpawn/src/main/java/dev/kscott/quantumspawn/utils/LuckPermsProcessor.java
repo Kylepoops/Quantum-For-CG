@@ -26,19 +26,16 @@ public class LuckPermsProcessor {
     }
 
     public static boolean isFirstJoin(Player player) {
-        User user = api.getPlayerAdapter(Player.class).getUser(player);
         return player.hasPermission("sp.hasLocation");
     }
 
     public static void loadLocation(Player player) {
         String playerName = player.getName();
         User user = api.getPlayerAdapter(Player.class).getUser(player);
-        RespawnLocation respawnLocation = null;
         try {
             int x = Integer.parseInt(Objects.requireNonNull(user.getCachedData().getMetaData().getMetaValue("x")));
             int z = Integer.parseInt(Objects.requireNonNull(user.getCachedData().getMetaData().getMetaValue("z")));
             respawnLocationMap.put(playerName, new RespawnLocation(x, z));
-            return;
         } catch (NullPointerException ex) {
             Bukkit.getLogger().info("Player" + playerName + "has sp.hasLocation but don't have MetaData");
         }
