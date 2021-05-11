@@ -133,7 +133,7 @@ public class Config {
         this.RESPAWN_RADIUS = this.root.node("spawn").node("spawn-on-death").node("respawn-radius").getInt();
         this.DEFAULT_WORLD_ENABLED = this.root.node("spawn").node("default-world").node("enabled").getBoolean(false);
 
-        this.DBTYPE = this.root.node("database").node("dbtype").getString("luckperms");
+        this.DBTYPE = this.root.node("database").node("dbtype").getString("luckperms").toLowerCase();
         this.connectionTimeout = this.root.node("database").node("hikariConfig").node("connectionTimeout").getLong(30000);
         this.minimumIdle = this.root.node("database").node("hikariConfig").node("minimunIdle").getInt(10);
         this.maximumPoolSize = this.root.node("database").node("hikariConfig").node("maximumPollSize").getInt(50);

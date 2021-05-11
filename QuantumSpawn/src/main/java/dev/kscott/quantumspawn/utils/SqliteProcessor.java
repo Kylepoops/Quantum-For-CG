@@ -8,13 +8,14 @@ import dev.kscott.quantumspawn.QuantumSpawnPlugin;
 import dev.kscott.quantumspawn.config.Config;
 import dev.kscott.quantumspawn.data.RespawnLocation;
 import dev.kscott.quantumspawn.inject.ConfigModule;
+import org.bukkit.entity.Player;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class SqliteProcessor {
+public class SqliteProcessor implements DataBaseProcessor {
     private static HikariDataSource sqlConnectionPool;
     public static void setSqlConnectionPoll() {
         final Injector injector = Guice.createInjector(new ConfigModule());
@@ -43,33 +44,50 @@ public class SqliteProcessor {
         }
     }
 
-    public void createDatabase() {
+    public void checkDatabase() {
         try (Connection connection = getConnection()) {
-            String sql = "CREATE TABLE location (player TEXT, x int, z int)";
+            String sql = "CREATE TABLE location (player TEXT, x int, z int) IF NOT EXISTS";
             try (PreparedStatement ps = connection.prepareStatement(sql)) {
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
-            QuantumSpawnPlugin.getPlugin().getLogger().warning("Failed to create table");
+            QuantumSpawnPlugin.getPlugin().getLogger().warning("Failed to check database");
         }
 
     }
 
-    public RespawnLocation getRespawnLocation(String playerName) {
+    public boolean checkJoined(Player player) {
         ResultSet rs;
+        String playerName = player.getName();
         try (Connection connection = getConnection()) {
-            String sql = "SELECT * FROM location WHERE player = '" + playerName + "'";
+            String sql = "SELECT * FROM location WHERE player = '?'";
             try (PreparedStatement psmt = connection.prepareStatement(sql)) {
+                psmt.setString(1, playerName);
                 rs = psmt.executeQuery();
                 if (rs.next()) {
-                    return new RespawnLocation(rs.getInt("x"), rs.getInt("z"));
-                } else {
-                    return null;
+                    respawnLocationMap.put(playerName, new RespawnLocation(rs.getInt("x"), rs.getInt("z")));
+                    return true;
                 }
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
-            return null;
+        }
+        return false;
+    }
+
+    @Override
+    public void buildData(Player player, int x, int z) {
+        String playerName = player.getName();
+        try (Connection connection = getConnection()) {
+            String sql = "INSERT INTO location (TEXT, INTEGER, INTEGER) VALUES (?,?,?)";
+            try (PreparedStatement psmt = connection.prepareStatement(sql)) {
+                psmt.setString(1, playerName);
+                psmt.setInt(2, x);
+                psmt.setInt(3, z);
+                psmt.executeUpdate();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
 }

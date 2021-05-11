@@ -53,7 +53,14 @@ public final class QuantumSpawnPlugin extends JavaPlugin {
             this.getLogger().info("Random spawn on death is enabled!");
         }
 
-        SqliteProcessor.setSqlConnectionPoll();
+        if (config.getDBTYPE().equals("sqlite")) {
+
+            SqliteProcessor.setSqlConnectionPoll();
+
+
+            SqliteProcessor sqliteProcessor = new SqliteProcessor();
+            sqliteProcessor.checkDatabase();
+        }
 
 
         new Metrics(this, 9727);

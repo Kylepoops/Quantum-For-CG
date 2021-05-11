@@ -4,18 +4,16 @@ import com.google.inject.Inject;
 import dev.kscott.quantum.location.LocationProvider;
 import dev.kscott.quantum.location.QuantumLocation;
 import dev.kscott.quantum.rule.ruleset.QuantumRuleset;
-import dev.kscott.quantumspawn.QuantumSpawnPlugin;
 import dev.kscott.quantumspawn.config.Config;
+import dev.kscott.quantumspawn.utils.DataBaseProcessor;
 import dev.kscott.quantumspawn.utils.LuckPermsProcessor;
-import net.luckperms.api.LuckPerms;
-import net.luckperms.api.model.user.User;
+import dev.kscott.quantumspawn.utils.SqliteProcessor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -24,6 +22,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import java.util.concurrent.CompletableFuture;
 
 public class PlayerJoinListener implements Listener {
+
+    DataBaseProcessor dataBaseProcessor;
 
     /**
      * Config reference.
@@ -54,19 +54,19 @@ public class PlayerJoinListener implements Listener {
         this.config = config;
         this.plugin = plugin;
         this.locationProvider = locationProvider;
+
+        if (config.getDBTYPE().equals("sqlite")) {
+            dataBaseProcessor = new SqliteProcessor();
+        } else {
+            dataBaseProcessor = new LuckPermsProcessor();
+        }
     }
 
     @EventHandler
     public void onPlayerJoin(final @NonNull PlayerJoinEvent event) {
         final @NonNull Player player = event.getPlayer();
-        final @NonNull String playerName = player.getName();
 
-        RegisteredServiceProvider<LuckPerms> provider = QuantumSpawnPlugin.getLpProvider();
-        LuckPerms api = provider.getProvider();
-        User user = api.getPlayerAdapter(Player.class).getUser(player);
-
-        if (LuckPermsProcessor.isFirstJoin(player)) {
-            LuckPermsProcessor.loadLocation(player);
+        if (dataBaseProcessor.checkJoined(player)) {
             return;
         }
 
@@ -93,7 +93,7 @@ public class PlayerJoinListener implements Listener {
                 player.teleportAsync(QuantumLocation.toCenterHorizontalLocation(location));
                 int x = (int) location.getX();
                 int z = (int) location.getZ();
-                LuckPermsProcessor.buildMateData(player, x, z);
+                dataBaseProcessor.buildData(player, x, z);
             }
         }.runTask(plugin));
     }

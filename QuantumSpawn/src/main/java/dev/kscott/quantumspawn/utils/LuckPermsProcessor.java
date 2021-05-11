@@ -11,37 +11,32 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
-public class LuckPermsProcessor {
+public class LuckPermsProcessor implements DataBaseProcessor {
     private final static @NonNull RegisteredServiceProvider<LuckPerms> provider = QuantumSpawnPlugin.getLpProvider();
     private final static LuckPerms api =provider.getProvider();
     private final static JavaPlugin plugin = QuantumSpawnPlugin.getPlugin();
-    private final static Map<String,RespawnLocation> respawnLocationMap = new HashMap<>();
 
-    public static Map<String, RespawnLocation> getRespawnMap() {
-        return respawnLocationMap;
-    }
-
-    public static boolean isFirstJoin(Player player) {
-        return player.hasPermission("sp.hasLocation");
-    }
-
-    public static void loadLocation(Player player) {
-        String playerName = player.getName();
-        User user = api.getPlayerAdapter(Player.class).getUser(player);
-        try {
-            int x = Integer.parseInt(Objects.requireNonNull(user.getCachedData().getMetaData().getMetaValue("x")));
-            int z = Integer.parseInt(Objects.requireNonNull(user.getCachedData().getMetaData().getMetaValue("z")));
-            respawnLocationMap.put(playerName, new RespawnLocation(x, z));
-        } catch (NullPointerException ex) {
-            Bukkit.getLogger().info("Player" + playerName + "has sp.hasLocation but don't have MetaData");
+    @Override
+    public boolean checkJoined(Player player) {
+        if (player.hasPermission("sp.hasLocation")) {
+            String playerName = player.getName();
+            User user = api.getPlayerAdapter(Player.class).getUser(player);
+            try {
+                int x = Integer.parseInt(Objects.requireNonNull(user.getCachedData().getMetaData().getMetaValue("x")));
+                int z = Integer.parseInt(Objects.requireNonNull(user.getCachedData().getMetaData().getMetaValue("z")));
+                respawnLocationMap.put(playerName, new RespawnLocation(x, z));
+                return true;
+            } catch (NullPointerException ex) {
+                Bukkit.getLogger().info("Player" + playerName + "has sp.hasLocation but don't have MetaData");
+            }
         }
+        return false;
     }
 
-    public static void buildMateData(Player player, int x, int z) {
+    @Override
+    public void buildData(Player player, int x, int z) {
         String playerName = player.getName();
         try {
             User user = api.getPlayerAdapter(Player.class).getUser(player);
