@@ -6,6 +6,7 @@ import dev.kscott.quantumspawn.QuantumSpawnPlugin;
 import dev.kscott.quantumspawn.config.Config;
 import dev.kscott.quantumspawn.data.RespawnLocation;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,6 +15,7 @@ import java.sql.SQLException;
 
 public class SqliteProcessor implements DataBaseProcessor {
     private static HikariDataSource sqlConnectionPool;
+    private final static JavaPlugin plugin = QuantumSpawnPlugin.getPlugin();
     public static void setSqlConnectionPoll() {
         final Config config = QuantumSpawnPlugin.getSpawnConfig();
 
@@ -42,7 +44,7 @@ public class SqliteProcessor implements DataBaseProcessor {
 
     public void checkDatabase() {
         try (Connection connection = getConnection()) {
-            String sql = "CREATE TABLE IF NOT EXISTS location (player TEXT, x int, z int)";
+            String sql = "CREATE TABLE IF NOT EXISTS location (uuid TEXT, x int, z int)";
             try (PreparedStatement ps = connection.prepareStatement(sql)) {
                 ps.executeUpdate();
             }
@@ -55,14 +57,13 @@ public class SqliteProcessor implements DataBaseProcessor {
 
     public boolean checkJoined(Player player) {
         ResultSet rs;
-        String playerName = player.getName();
         try (Connection connection = getConnection()) {
-            String sql = "SELECT * FROM location WHERE player = ?";
+            String sql = "SELECT * FROM location WHERE uuid = ?";
             try (PreparedStatement psmt = connection.prepareStatement(sql)) {
-                psmt.setString(1, playerName);
+                psmt.setString(1, player.getUniqueId().toString());
                 rs = psmt.executeQuery();
                 if (rs.next()) {
-                    respawnLocationMap.put(playerName, new RespawnLocation(rs.getInt("x"), rs.getInt("z")));
+                    respawnLocationMap.put(player.getName(), new RespawnLocation(rs.getInt("x"), rs.getInt("z")));
                     return true;
                 }
             }
@@ -76,13 +77,14 @@ public class SqliteProcessor implements DataBaseProcessor {
     public void buildData(Player player, int x, int z) {
         String playerName = player.getName();
         try (Connection connection = getConnection()) {
-            String sql = "INSERT INTO location (player, x, z) VALUES (?,?,?)";
+            String sql = "INSERT INTO location (uuid, x, z) VALUES (?,?,?)";
             try (PreparedStatement psmt = connection.prepareStatement(sql)) {
-                psmt.setString(1, playerName);
+                psmt.setString(1, player.getUniqueId().toString());
                 psmt.setInt(2, x);
                 psmt.setInt(3, z);
                 psmt.executeUpdate();
                 respawnLocationMap.put(playerName,new RespawnLocation(x,z));
+                plugin.getLogger().info("Generated Datebase table for " + playerName + ": {X=" + x + ", Z=" + z + "}");
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
