@@ -8,6 +8,7 @@ import dev.kscott.quantumspawn.inject.PluginModule;
 import dev.kscott.quantumspawn.inject.QuantumModule;
 import dev.kscott.quantumspawn.listeners.PlayerDeathListener;
 import dev.kscott.quantumspawn.listeners.PlayerJoinListener;
+import dev.kscott.quantumspawn.utils.LuckPermsProcessor;
 import dev.kscott.quantumspawn.utils.SqliteProcessor;
 import net.luckperms.api.LuckPerms;
 import org.bstats.bukkit.Metrics;
@@ -23,12 +24,18 @@ public final class QuantumSpawnPlugin extends JavaPlugin {
 
     static RegisteredServiceProvider<LuckPerms> lpProvider = null;
 
+    static LuckPermsProcessor luckPermsProcessor = null;
+
     public static JavaPlugin getPlugin() {
         return JavaPlugin.getPlugin(QuantumSpawnPlugin.class);
     }
 
     public static RegisteredServiceProvider<LuckPerms> getLpProvider() {
         return lpProvider;
+    }
+
+    public static LuckPermsProcessor getLuckPermsProcessor() {
+        return luckPermsProcessor;
     }
 
     @Override

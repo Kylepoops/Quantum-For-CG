@@ -6,6 +6,7 @@ import dev.kscott.quantum.location.QuantumLocation;
 import dev.kscott.quantum.rule.ruleset.QuantumRuleset;
 import dev.kscott.quantumspawn.config.Config;
 import dev.kscott.quantumspawn.data.RespawnLocation;
+import dev.kscott.quantumspawn.utils.LuckPermsProcessor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -73,7 +74,7 @@ public class PlayerDeathListener implements Listener {
             return;
         }
 
-        RespawnLocation respawnLocation = PlayerJoinListener.getRespawnMap().get(playerName);
+        RespawnLocation respawnLocation = LuckPermsProcessor.getRespawnMap().get(playerName);
 
         final int x = respawnLocation.getX();
         final int z = respawnLocation.getZ();

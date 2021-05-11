@@ -6,11 +6,9 @@ import dev.kscott.quantum.location.QuantumLocation;
 import dev.kscott.quantum.rule.ruleset.QuantumRuleset;
 import dev.kscott.quantumspawn.QuantumSpawnPlugin;
 import dev.kscott.quantumspawn.config.Config;
-import dev.kscott.quantumspawn.data.RespawnLocation;
+import dev.kscott.quantumspawn.utils.LuckPermsProcessor;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.user.User;
-import net.luckperms.api.node.Node;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -23,14 +21,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 public class PlayerJoinListener implements Listener {
 
-    private static final Map<String, RespawnLocation> respawnLocation = new HashMap<>();
     /**
      * Config reference.
      */
@@ -62,10 +56,6 @@ public class PlayerJoinListener implements Listener {
         this.locationProvider = locationProvider;
     }
 
-    public static Map<String, RespawnLocation> getRespawnMap() {
-        return respawnLocation;
-    }
-
     @EventHandler
     public void onPlayerJoin(final @NonNull PlayerJoinEvent event) {
         final @NonNull Player player = event.getPlayer();
@@ -75,15 +65,11 @@ public class PlayerJoinListener implements Listener {
         LuckPerms api = provider.getProvider();
         User user = api.getPlayerAdapter(Player.class).getUser(player);
 
-        if (player.hasPermission("sp.hasLocation")) {
-            try {
-                int x = Integer.parseInt(Objects.requireNonNull(user.getCachedData().getMetaData().getMetaValue("x")));
-                int z = Integer.parseInt(Objects.requireNonNull(user.getCachedData().getMetaData().getMetaValue("z")));
-                respawnLocation.put(playerName, new RespawnLocation(x, z));
-                return;
-            } catch (NullPointerException ex) {
-                Bukkit.getLogger().info("Player" + playerName + "has sp.hasLocation but don't have MetaData");
-            }
+        LuckPermsProcessor luckPermsProcessor = QuantumSpawnPlugin.getLuckPermsProcessor();
+
+        if (luckPermsProcessor.isFirstJoin(player)) {
+            luckPermsProcessor.loadLocation(player);
+            return;
         }
 
         final @NonNull World world;
@@ -107,19 +93,9 @@ public class PlayerJoinListener implements Listener {
             public void run() {
                 Location location = quantumLocation.getLocation();
                 player.teleportAsync(QuantumLocation.toCenterHorizontalLocation(location));
-
-                try {
-                    int x = (int) location.getX();
-                    int z = (int) location.getZ();
-                    plugin.getLogger().info("Generating MetaDate for " + playerName + ": {X=" + x + ", Z=" + z + "}");
-                    respawnLocation.put(player.getName(), new RespawnLocation(x, z));
-                    user.data().add(Node.builder("meta.x." + x).build());
-                    user.data().add(Node.builder("meta.z." + z).build());
-                    user.data().add(Node.builder("sp.hasLocation").build());
-                    api.getUserManager().saveUser(user);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+                int x = (int) location.getX();
+                int z = (int) location.getZ();
+                luckPermsProcessor.buildMateData(player, x, z);
             }
         }.runTask(plugin));
     }
