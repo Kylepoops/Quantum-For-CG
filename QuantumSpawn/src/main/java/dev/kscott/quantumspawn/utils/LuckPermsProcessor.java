@@ -15,7 +15,7 @@ import java.util.Objects;
 
 public class LuckPermsProcessor implements DataBaseProcessor {
     private final static @NonNull RegisteredServiceProvider<LuckPerms> provider = QuantumSpawnPlugin.getLpProvider();
-    private final static LuckPerms api =provider.getProvider();
+    private final static LuckPerms api = provider.getProvider();
     private final static JavaPlugin plugin = QuantumSpawnPlugin.getPlugin();
 
     @Override
@@ -23,17 +23,17 @@ public class LuckPermsProcessor implements DataBaseProcessor {
         if (!player.hasPermission("sp.hasLocation")) {
             return false;
         }
-            String playerName = player.getName();
-            User user = api.getPlayerAdapter(Player.class).getUser(player);
-            try {
-                int x = Integer.parseInt(Objects.requireNonNull(user.getCachedData().getMetaData().getMetaValue("x")));
-                int z = Integer.parseInt(Objects.requireNonNull(user.getCachedData().getMetaData().getMetaValue("z")));
-                respawnLocationMap.put(playerName, new RespawnLocation(x, z));
-                return true;
-            } catch (NullPointerException ex) {
-                Bukkit.getLogger().info("Player" + playerName + "has sp.hasLocation but don't have MetaData");
-                return false;
-            }
+        String playerName = player.getName();
+        User user = api.getPlayerAdapter(Player.class).getUser(player);
+        try {
+            int x = Integer.parseInt(Objects.requireNonNull(user.getCachedData().getMetaData().getMetaValue("x")));
+            int z = Integer.parseInt(Objects.requireNonNull(user.getCachedData().getMetaData().getMetaValue("z")));
+            respawnLocationMap.put(playerName, new RespawnLocation(x, z));
+            return true;
+        } catch (NullPointerException ex) {
+            Bukkit.getLogger().info("Player" + playerName + "has sp.hasLocation but don't have MetaData");
+            return false;
+        }
 
     }
 
