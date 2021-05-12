@@ -12,8 +12,8 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.util.Objects;
 
 public class LuckPermsProcessor implements DataBaseProcessor {
-    private final static @NonNull RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
-    private final static LuckPerms api = provider.getProvider();
+    private final static @NonNull RegisteredServiceProvider<LuckPerms> provider = Objects.requireNonNull(Bukkit.getServicesManager().getRegistration(LuckPerms.class));
+    private final static LuckPerms api = Objects.requireNonNull(provider).getProvider();
 
     @Override
     public boolean checkJoined(Player player) {
