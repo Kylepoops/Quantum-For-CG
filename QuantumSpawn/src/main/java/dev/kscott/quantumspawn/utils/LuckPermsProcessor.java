@@ -31,7 +31,7 @@ public class LuckPermsProcessor implements DataBaseProcessor {
             respawnLocationMap.put(playerName, new RespawnLocation(x, z));
             return true;
         } catch (NullPointerException ex) {
-            Bukkit.getLogger().info("Player" + playerName + "has sp.hasLocation but don't have MetaData");
+            Bukkit.getLogger().info("[QuantumSpawn] Player" + playerName + "has sp.hasLocation but don't have MetaData");
             return false;
         }
 
@@ -42,7 +42,7 @@ public class LuckPermsProcessor implements DataBaseProcessor {
         String playerName = player.getName();
         try {
             User user = api.getPlayerAdapter(Player.class).getUser(player);
-            plugin.getLogger().info("Generating MetaDate for " + playerName + ": {X=" + x + ", Z=" + z + "}");
+            Bukkit.getLogger().info("[QuantumSpawn] Generating MetaDate for " + playerName + ": {X=" + x + ", Z=" + z + "}");
             respawnLocationMap.put(player.getName(), new RespawnLocation(x, z));
             user.data().add(Node.builder("meta.x." + x).build());
             user.data().add(Node.builder("meta.z." + z).build());

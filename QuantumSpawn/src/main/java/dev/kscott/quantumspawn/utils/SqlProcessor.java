@@ -3,6 +3,7 @@ package dev.kscott.quantumspawn.utils;
 import com.zaxxer.hikari.HikariDataSource;
 import dev.kscott.quantumspawn.QuantumSpawnPlugin;
 import dev.kscott.quantumspawn.data.RespawnLocation;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -20,7 +21,7 @@ public abstract class SqlProcessor implements DataBaseProcessor {
         try {
             return sqlConnectionPool.getConnection();
         } catch (SQLException e) {
-            QuantumSpawnPlugin.getPlugin().getLogger().warning("Failed to connect to database");
+            Bukkit.getLogger().warning("[QuantumSpawn] Failed to connect to database");
             return null;
         }
     }
@@ -32,7 +33,7 @@ public abstract class SqlProcessor implements DataBaseProcessor {
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
-            QuantumSpawnPlugin.getPlugin().getLogger().warning("Failed to check database");
+            Bukkit.getLogger().warning("[QuantumSpawn] Failed to check database");
             e.printStackTrace();
         }
 
@@ -67,7 +68,7 @@ public abstract class SqlProcessor implements DataBaseProcessor {
                 psmt.setInt(3, z);
                 psmt.executeUpdate();
                 respawnLocationMap.put(playerName,new RespawnLocation(x,z));
-                plugin.getLogger().info("Generated Datebase table for " + playerName + ": {X=" + x + ", Z=" + z + "}");
+                Bukkit.getLogger().info("[QuantumSpawn] Generated Datebase table for " + playerName + ": {X=" + x + ", Z=" + z + "}");
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
