@@ -7,6 +7,7 @@ import dev.kscott.quantum.rule.ruleset.QuantumRuleset;
 import dev.kscott.quantumspawn.config.Config;
 import dev.kscott.quantumspawn.data.RespawnLocation;
 import dev.kscott.quantumspawn.utils.DataBaseProcessor;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -102,7 +103,7 @@ public class PlayerDeathListener implements Listener {
             @Override
             public void run() {
                 player.teleportAsync(QuantumLocation.toCenterHorizontalLocation(loc));
-                plugin.getLogger().info("Player " + playerName + " respawned at " + loc.toString());
+                Bukkit.getLogger().info("[QuantumSpawn] Player " + playerName + " respawned at " + loc.toString());
             }
         }.runTask(plugin));
     }
