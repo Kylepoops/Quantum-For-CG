@@ -8,7 +8,6 @@ import net.luckperms.api.node.Node;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Objects;
@@ -16,7 +15,6 @@ import java.util.Objects;
 public class LuckPermsProcessor implements DataBaseProcessor {
     private final static @NonNull RegisteredServiceProvider<LuckPerms> provider = QuantumSpawnPlugin.getLpProvider();
     private final static LuckPerms api = provider.getProvider();
-    private final static JavaPlugin plugin = QuantumSpawnPlugin.getPlugin();
 
     @Override
     public boolean checkJoined(Player player) {
