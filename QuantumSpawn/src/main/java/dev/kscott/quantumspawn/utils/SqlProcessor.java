@@ -1,11 +1,9 @@
 package dev.kscott.quantumspawn.utils;
 
 import com.zaxxer.hikari.HikariDataSource;
-import dev.kscott.quantumspawn.QuantumSpawnPlugin;
 import dev.kscott.quantumspawn.data.RespawnLocation;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,7 +12,6 @@ import java.sql.SQLException;
 
 public abstract class SqlProcessor implements DataBaseProcessor {
     protected static HikariDataSource sqlConnectionPool;
-    private final static JavaPlugin plugin = QuantumSpawnPlugin.getPlugin();
     public abstract void setSqlConnectionPoll();
 
     public Connection getConnection() {
