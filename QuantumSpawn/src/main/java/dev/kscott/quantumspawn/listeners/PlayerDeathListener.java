@@ -78,14 +78,10 @@ public class PlayerDeathListener implements Listener {
         int Respawn_Radius = config.getRESPAWN_RADIUS();
 
 
-        final @NonNull World world;
-        if (this.config.isDefaultWorldEnabled()) {
-            assert this.config.getDefaultWorld() != null;
-            world = this.config.getDefaultWorld();
-        } else {
-            world = player.getWorld();
-        }
+        @SuppressWarnings("ConstantConditions")
+        final @NonNull World world = this.config.isDefaultWorldEnabled() ? this.config.getDefaultWorld() : player.getWorld();
 
+        @SuppressWarnings("ConstantConditions")
         QuantumRuleset ruleset = config.getRuleset(world);
 
         if (ruleset == null) {
