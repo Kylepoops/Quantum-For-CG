@@ -20,7 +20,9 @@ public class LuckPermsProcessor implements DataBaseProcessor {
 
     @Override
     public boolean checkJoined(Player player) {
-        if (player.hasPermission("sp.hasLocation")) {
+        if (!player.hasPermission("sp.hasLocation")) {
+            return false;
+        }
             String playerName = player.getName();
             User user = api.getPlayerAdapter(Player.class).getUser(player);
             try {
@@ -30,9 +32,9 @@ public class LuckPermsProcessor implements DataBaseProcessor {
                 return true;
             } catch (NullPointerException ex) {
                 Bukkit.getLogger().info("Player" + playerName + "has sp.hasLocation but don't have MetaData");
+                return false;
             }
-        }
-        return false;
+
     }
 
     @Override
