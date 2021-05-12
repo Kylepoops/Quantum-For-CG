@@ -8,6 +8,8 @@ import dev.kscott.quantumspawn.inject.PluginModule;
 import dev.kscott.quantumspawn.inject.QuantumModule;
 import dev.kscott.quantumspawn.listeners.PlayerDeathListener;
 import dev.kscott.quantumspawn.listeners.PlayerJoinListener;
+import dev.kscott.quantumspawn.utils.MySQLProcessor;
+import dev.kscott.quantumspawn.utils.SqlProcessor;
 import dev.kscott.quantumspawn.utils.SqliteProcessor;
 import net.luckperms.api.LuckPerms;
 import org.bstats.bukkit.Metrics;
@@ -60,9 +62,13 @@ public final class QuantumSpawnPlugin extends JavaPlugin {
         }
 
         if (config.getDBTYPE().equals("sqlite")) {
-            SqliteProcessor sqliteProcessor = new SqliteProcessor();
+            SqlProcessor sqliteProcessor = new SqliteProcessor();
             sqliteProcessor.setSqlConnectionPoll();
             sqliteProcessor.checkDatabase();
+        } else if (config.getDBTYPE().equals("mysql")) {
+            SqlProcessor MySQLProcess = new MySQLProcessor();
+            MySQLProcess.setSqlConnectionPoll();
+            MySQLProcess.checkDatabase();
         }
 
 

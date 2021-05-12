@@ -71,6 +71,12 @@ public class Config {
     private int minimumIdle;
     private int maximumPoolSize;
 
+    private String sqlAddress;
+    private int sqlPort;
+    private String sqlDatabase;
+    private String sqlUser;
+    private String sqlPassword;
+
     /**
      * The default world to put the player in.
      */
@@ -123,6 +129,26 @@ public class Config {
         }
     }
 
+    public String getSqlAddress() {
+        return sqlAddress;
+    }
+
+    public int getSqlPort() {
+        return sqlPort;
+    }
+
+    public String getSqlDatabase() {
+        return sqlDatabase;
+    }
+
+    public String getSqlUser() {
+        return sqlUser;
+    }
+
+    public String getSqlPassword() {
+        return sqlPassword;
+    }
+
     /**
      * Loads QuantumWild's configuration values
      */
@@ -134,9 +160,15 @@ public class Config {
         this.DEFAULT_WORLD_ENABLED = this.root.node("spawn").node("default-world").node("enabled").getBoolean(false);
 
         this.DBTYPE = this.root.node("database").node("dbtype").getString("luckperms").toLowerCase();
-        this.connectionTimeout = this.root.node("database").node("hikariConfig").node("connectionTimeout").getLong(30000);
-        this.minimumIdle = this.root.node("database").node("hikariConfig").node("minimunIdle").getInt(10);
-        this.maximumPoolSize = this.root.node("database").node("hikariConfig").node("maximumPollSize").getInt(50);
+        this.connectionTimeout = this.root.node("database").node("HikariConfig").node("connectionTimeout").getLong(30000);
+        this.minimumIdle = this.root.node("database").node("HikariConfig").node("minimunIdle").getInt(10);
+        this.maximumPoolSize = this.root.node("database").node("HikariConfig").node("maximumPollSize").getInt(50);
+        this.sqlAddress = this.root.node("database").node("MySQL").node("address").getString("127.0.0.1");
+        this.sqlPort = this.root.node("database").node("MySQL").node("port").getInt(3306);
+        this.sqlDatabase = this.root.node("database").node("MySQL").node("database").getString("Quantum");
+        this.sqlUser = this.root.node("database").node("MySQL").node("user").getString("admin");
+        this.sqlPassword = this.root.node("database").node("MySQL").node("password").getString("123456");
+
 
 
         this.DEFAULT_WORLD = Bukkit.getWorld(this.root.node("spawn").node("default-world").node("world").getString(""));

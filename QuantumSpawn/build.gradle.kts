@@ -15,4 +15,6 @@ dependencies {
 
     implementation("com.zaxxer:HikariCP:4.0.3")
     implementation("org.xerial:sqlite-jdbc:3.34.0")
+    implementation("mysql", "mysql-connector-java", "8.0.25")
+
 }
