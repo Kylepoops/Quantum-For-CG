@@ -127,6 +127,16 @@ public class LocationProvider {
     }
 
     /**
+     * Accesses the Location queue to find a location. If no location was in the queue, it will return null.
+     *
+     * @param quantumRuleset The target ruleset.
+     * @return Location from the queue. May be null if the queue was empty.
+     */
+    public @Nullable QuantumLocation getQueueLocation(final @NonNull QuantumRuleset quantumRuleset) {
+        return this.locationQueue.popLocation(quantumRuleset);
+    }
+
+    /**
      * Searches for a location with the given ruleset until it reaches max retries (or finds a valid location).
      *
      * @param tries          how many times has the search been tried (call this with 0).
