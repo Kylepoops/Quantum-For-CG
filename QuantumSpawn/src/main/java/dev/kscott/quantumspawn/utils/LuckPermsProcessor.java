@@ -54,7 +54,10 @@ public class LuckPermsProcessor implements DataBaseProcessor {
 
     @Override
     public void setData(Player player, int x, int z) {
+        String playerName = player.getName();
         try {
+            respawnLocationMap.remove(playerName);
+            respawnLocationMap.put(playerName, new RespawnLocation(x, z));
             User user = api.getPlayerAdapter(Player.class).getUser(player);
             user.data().clear(NodeMatcher.metaKey("x"));
             user.data().clear(NodeMatcher.metaKey("z"));
