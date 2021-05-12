@@ -1,6 +1,5 @@
 package dev.kscott.quantumspawn.utils;
 
-import dev.kscott.quantumspawn.QuantumSpawnPlugin;
 import dev.kscott.quantumspawn.data.RespawnLocation;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.user.User;
@@ -13,7 +12,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.util.Objects;
 
 public class LuckPermsProcessor implements DataBaseProcessor {
-    private final static @NonNull RegisteredServiceProvider<LuckPerms> provider = QuantumSpawnPlugin.getLpProvider();
+    private final static @NonNull RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
     private final static LuckPerms api = provider.getProvider();
 
     @Override

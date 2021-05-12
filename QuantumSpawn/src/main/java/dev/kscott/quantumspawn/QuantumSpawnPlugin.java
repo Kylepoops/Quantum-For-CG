@@ -11,10 +11,7 @@ import dev.kscott.quantumspawn.listeners.PlayerJoinListener;
 import dev.kscott.quantumspawn.utils.MySQLProcessor;
 import dev.kscott.quantumspawn.utils.SqlProcessor;
 import dev.kscott.quantumspawn.utils.SqliteProcessor;
-import net.luckperms.api.LuckPerms;
 import org.bstats.bukkit.Metrics;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -27,14 +24,8 @@ public final class QuantumSpawnPlugin extends JavaPlugin {
 
     static Config config;
 
-    static RegisteredServiceProvider<LuckPerms> lpProvider = null;
-
     public static JavaPlugin getPlugin() {
         return JavaPlugin.getPlugin(QuantumSpawnPlugin.class);
-    }
-
-    public static RegisteredServiceProvider<LuckPerms> getLpProvider() {
-        return lpProvider;
     }
 
     public static Config getSpawnConfig() { return config; }
@@ -46,8 +37,6 @@ public final class QuantumSpawnPlugin extends JavaPlugin {
                 new QuantumModule(this),
                 new ConfigModule()
         );
-
-        lpProvider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
 
         config = Objects.requireNonNull(loadConfig(injector));
 
