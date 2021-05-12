@@ -18,4 +18,6 @@ public interface DataBaseProcessor {
 
     void buildData(Player player, int x, int z);
 
+    void setData(Player player, int x, int z);
+
 }
