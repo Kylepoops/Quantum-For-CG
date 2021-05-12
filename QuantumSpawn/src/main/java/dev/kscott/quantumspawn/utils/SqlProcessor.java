@@ -58,26 +58,28 @@ public abstract class SqlProcessor implements DataBaseProcessor {
     public void buildData(Player player, int x, int z) {
         String playerName = player.getName();
         try (Connection connection = getConnection()) {
-            setTable(player, x, z, playerName, connection);
+            String sql = "INSERT INTO location (uuid, x, z) VALUES (?,?,?)";
+            try (PreparedStatement psmt = connection.prepareStatement(sql)) {
+                psmt.setString(1, player.getUniqueId().toString());
+                psmt.setInt(2, x);
+                psmt.setInt(3, z);
+                psmt.executeUpdate();
+                respawnLocationMap.put(playerName, new RespawnLocation(x, z));
+                Bukkit.getLogger().info("[QuantumSpawn] Generated Database table for " + playerName + ": {X=" + x + ", Z=" + z + "}");
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
-    private void setTable(Player player, int x, int z, String playerName, Connection connection) throws SQLException {
-        String sql = "INSERT INTO location (uuid, x, z) VALUES (?,?,?)";
-        try (PreparedStatement psmt = connection.prepareStatement(sql)) {
-            psmt.setString(1, player.getUniqueId().toString());
-            psmt.setInt(2, x);
-            psmt.setInt(3, z);
-            psmt.executeUpdate();
-            respawnLocationMap.put(playerName,new RespawnLocation(x,z));
-            Bukkit.getLogger().info("[QuantumSpawn] Generated Database table for " + playerName + ": {X=" + x + ", Z=" + z + "}");
-        }
+    @Override
+    public void setData(Player player, int x, int z) {
+        clearData(player);
+        buildData(player, x, z);
     }
 
     @Override
-    public void setData(Player player, int x, int z) {
+    public void clearData(Player player) {
         String playerName = player.getName();
         try (Connection connection = getConnection()) {
             String sql = "DELETE FROM location WHERE player = ?";
@@ -85,7 +87,6 @@ public abstract class SqlProcessor implements DataBaseProcessor {
                 psmt.executeUpdate();
                 respawnLocationMap.remove(playerName);
             }
-            setTable(player, x, z, playerName, connection);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }

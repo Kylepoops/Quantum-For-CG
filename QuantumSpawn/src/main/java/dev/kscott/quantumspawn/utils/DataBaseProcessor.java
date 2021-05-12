@@ -20,4 +20,6 @@ public interface DataBaseProcessor {
 
     void setData(Player player, int x, int z);
 
+    void clearData(Player player);
+
 }
