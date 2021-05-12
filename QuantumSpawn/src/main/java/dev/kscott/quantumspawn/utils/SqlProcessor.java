@@ -1,9 +1,7 @@
 package dev.kscott.quantumspawn.utils;
 
-import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import dev.kscott.quantumspawn.QuantumSpawnPlugin;
-import dev.kscott.quantumspawn.config.Config;
 import dev.kscott.quantumspawn.data.RespawnLocation;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -13,25 +11,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class SqliteProcessor implements DataBaseProcessor {
+public abstract class SqlProcessor implements DataBaseProcessor {
     private static HikariDataSource sqlConnectionPool;
     private final static JavaPlugin plugin = QuantumSpawnPlugin.getPlugin();
-    public static void setSqlConnectionPoll() {
-        final Config config = QuantumSpawnPlugin.getSpawnConfig();
-
-        HikariConfig hikariConfig = new HikariConfig();
-        hikariConfig.setDriverClassName("org.sqlite.JDBC");
-
-        hikariConfig.setConnectionTimeout(config.getConnectionTimeout());
-        hikariConfig.setMinimumIdle(config.getMinimumIdle());
-        hikariConfig.setMaximumPoolSize(config.getMaximumPoolSize());
-
-        String URL = "jdbc:sqlite:" + QuantumSpawnPlugin.getPlugin().getDataFolder().getAbsolutePath() + "/database.db";
-        hikariConfig.setJdbcUrl(URL);
-
-        hikariConfig.setAutoCommit(true);
-        sqlConnectionPool= new HikariDataSource(hikariConfig);
-    }
+    public abstract void setSqlConnectionPoll();
 
     public Connection getConnection() {
         try {
