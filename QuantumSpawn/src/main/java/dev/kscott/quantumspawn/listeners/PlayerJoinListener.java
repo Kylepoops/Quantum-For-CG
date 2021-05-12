@@ -70,14 +70,10 @@ public class PlayerJoinListener implements Listener {
             return;
         }
 
-        final @NonNull World world;
-        if (config.isDefaultWorldEnabled()) {
-            assert config.getDefaultWorld() != null;
-            world = config.getDefaultWorld();
-        } else {
-            world = player.getWorld();
-        }
+        @SuppressWarnings("ConstantConditions")
+        final @NonNull World world = this.config.isDefaultWorldEnabled() ? this.config.getDefaultWorld() : player.getWorld();
 
+        @SuppressWarnings("ConstantConditions")
         final @Nullable QuantumRuleset ruleset = config.getRuleset(world);
 
         if (ruleset == null) {
