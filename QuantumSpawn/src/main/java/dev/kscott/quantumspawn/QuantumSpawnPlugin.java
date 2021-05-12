@@ -60,11 +60,8 @@ public final class QuantumSpawnPlugin extends JavaPlugin {
         }
 
         if (config.getDBTYPE().equals("sqlite")) {
-
-            SqliteProcessor.setSqlConnectionPoll();
-
-
             SqliteProcessor sqliteProcessor = new SqliteProcessor();
+            sqliteProcessor.setSqlConnectionPoll();
             sqliteProcessor.checkDatabase();
         }
 

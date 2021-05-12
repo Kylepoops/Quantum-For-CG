@@ -12,7 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public abstract class SqlProcessor implements DataBaseProcessor {
-    private static HikariDataSource sqlConnectionPool;
+    protected static HikariDataSource sqlConnectionPool;
     private final static JavaPlugin plugin = QuantumSpawnPlugin.getPlugin();
     public abstract void setSqlConnectionPoll();
 
