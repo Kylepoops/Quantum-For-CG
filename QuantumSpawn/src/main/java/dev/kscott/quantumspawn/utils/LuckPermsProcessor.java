@@ -4,6 +4,7 @@ import dev.kscott.quantumspawn.data.RespawnLocation;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.Node;
+import net.luckperms.api.node.types.MetaNode;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -41,8 +42,8 @@ public class LuckPermsProcessor implements DataBaseProcessor {
             User user = api.getPlayerAdapter(Player.class).getUser(player);
             Bukkit.getLogger().info("[QuantumSpawn] Generating MetaDate for " + playerName + ": {X=" + x + ", Z=" + z + "}");
             respawnLocationMap.put(player.getName(), new RespawnLocation(x, z));
-            user.data().add(Node.builder("meta.x." + x).build());
-            user.data().add(Node.builder("meta.z." + z).build());
+            user.data().add(MetaNode.builder("x", String.valueOf(x)).build());
+            user.data().add(MetaNode.builder("x", String.valueOf(x)).build());
             user.data().add(Node.builder("sp.hasLocation").build());
             api.getUserManager().saveUser(user);
         } catch (Exception ex) {
