@@ -8,6 +8,12 @@ import cloud.commandframework.tasks.TaskRecipe;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import dev.kscott.quantumspawn.QuantumSpawnPlugin;
+import dev.kscott.quantumspawn.config.Config;
+import dev.kscott.quantumspawn.utils.DataBaseProcessor;
+import dev.kscott.quantumspawn.utils.LuckPermsProcessor;
+import dev.kscott.quantumspawn.utils.MySQLProcessor;
+import dev.kscott.quantumspawn.utils.SqliteProcessor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -21,6 +27,8 @@ import java.util.function.Function;
 public class CommandModule extends AbstractModule {
 
     private final@MonotonicNonNull PaperCommandManager<CommandSender> commandManager;
+
+    private final @MonotonicNonNull DataBaseProcessor dataBaseProcessor;
 
     /**
      * Constructs the CommandModule
@@ -44,6 +52,21 @@ public class CommandModule extends AbstractModule {
         } catch (Exception e) {
             throw new RuntimeException("Failed to initialize the CommandManager");
         }
+
+        @MonotonicNonNull Config config = QuantumSpawnPlugin.getSpawnConfig();
+
+        switch (config.getDBTYPE()) {
+            case "sqlite" :
+                dataBaseProcessor = new SqliteProcessor();
+                break;
+            case "mysql" :
+                dataBaseProcessor = new MySQLProcessor();
+                break;
+            case "luckperms" :
+            default :
+                dataBaseProcessor = new LuckPermsProcessor();
+                break;
+        }
     }
 
     @Provides
@@ -61,6 +84,12 @@ public class CommandModule extends AbstractModule {
     @Provides
     public TaskRecipe provideTaskRecipe() {
         return this.commandManager.taskRecipe();
+    }
+
+    @Provides
+    @Singleton
+    public DataBaseProcessor provideDataBaseProcessor() {
+        return this.dataBaseProcessor;
     }
 
 }
