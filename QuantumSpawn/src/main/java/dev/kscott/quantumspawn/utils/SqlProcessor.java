@@ -10,7 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public abstract class SqlProcessor implements DataBaseProcessor {
+public abstract class SqlProcessor implements DataProcessor {
     protected static HikariDataSource sqlConnectionPool;
     public abstract void setSqlConnectionPoll();
 

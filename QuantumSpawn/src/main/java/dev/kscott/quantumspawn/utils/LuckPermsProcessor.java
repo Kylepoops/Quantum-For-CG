@@ -13,7 +13,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Objects;
 
-public class LuckPermsProcessor implements DataBaseProcessor {
+public class LuckPermsProcessor implements DataProcessor {
     private final static @NonNull RegisteredServiceProvider<LuckPerms> provider = Objects.requireNonNull(Bukkit.getServicesManager().getRegistration(LuckPerms.class));
     private final static LuckPerms api = Objects.requireNonNull(provider).getProvider();
 

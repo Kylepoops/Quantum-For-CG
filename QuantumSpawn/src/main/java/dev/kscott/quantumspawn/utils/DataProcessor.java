@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 import java.util.Map;
 
-public interface DataBaseProcessor {
+public interface DataProcessor {
 
     Map<String, RespawnLocation> respawnLocationMap = new HashMap<>();
 

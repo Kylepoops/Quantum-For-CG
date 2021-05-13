@@ -10,7 +10,7 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import dev.kscott.quantumspawn.QuantumSpawnPlugin;
 import dev.kscott.quantumspawn.config.Config;
-import dev.kscott.quantumspawn.utils.DataBaseProcessor;
+import dev.kscott.quantumspawn.utils.DataProcessor;
 import dev.kscott.quantumspawn.utils.LuckPermsProcessor;
 import dev.kscott.quantumspawn.utils.MySQLProcessor;
 import dev.kscott.quantumspawn.utils.SqliteProcessor;
@@ -28,7 +28,7 @@ public class CommandModule extends AbstractModule {
 
     private final@MonotonicNonNull PaperCommandManager<CommandSender> commandManager;
 
-    private final @MonotonicNonNull DataBaseProcessor dataBaseProcessor;
+    private final @MonotonicNonNull DataProcessor dataProcessor;
 
     /**
      * Constructs the CommandModule
@@ -57,14 +57,14 @@ public class CommandModule extends AbstractModule {
 
         switch (config.getDBTYPE()) {
             case "sqlite" :
-                dataBaseProcessor = new SqliteProcessor();
+                dataProcessor = new SqliteProcessor();
                 break;
             case "mysql" :
-                dataBaseProcessor = new MySQLProcessor();
+                dataProcessor = new MySQLProcessor();
                 break;
             case "luckperms" :
             default :
-                dataBaseProcessor = new LuckPermsProcessor();
+                dataProcessor = new LuckPermsProcessor();
                 break;
         }
     }
@@ -88,8 +88,8 @@ public class CommandModule extends AbstractModule {
 
     @Provides
     @Singleton
-    public DataBaseProcessor provideDataBaseProcessor() {
-        return this.dataBaseProcessor;
+    public DataProcessor provideDataBaseProcessor() {
+        return this.dataProcessor;
     }
 
 }

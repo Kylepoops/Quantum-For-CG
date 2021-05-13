@@ -5,7 +5,7 @@ import dev.kscott.quantum.location.LocationProvider;
 import dev.kscott.quantum.location.QuantumLocation;
 import dev.kscott.quantum.rule.ruleset.QuantumRuleset;
 import dev.kscott.quantumspawn.config.Config;
-import dev.kscott.quantumspawn.utils.DataBaseProcessor;
+import dev.kscott.quantumspawn.utils.DataProcessor;
 import dev.kscott.quantumspawn.utils.LuckPermsProcessor;
 import dev.kscott.quantumspawn.utils.SqliteProcessor;
 import org.bukkit.Location;
@@ -23,7 +23,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class PlayerJoinListener implements Listener {
 
-    DataBaseProcessor dataBaseProcessor;
+    DataProcessor dataProcessor;
 
     /**
      * Config reference.
@@ -56,9 +56,9 @@ public class PlayerJoinListener implements Listener {
         this.locationProvider = locationProvider;
 
         if (config.getDBTYPE().equals("sqlite")) {
-            dataBaseProcessor = new SqliteProcessor();
+            dataProcessor = new SqliteProcessor();
         } else {
-            dataBaseProcessor = new LuckPermsProcessor();
+            dataProcessor = new LuckPermsProcessor();
         }
     }
 
@@ -66,7 +66,7 @@ public class PlayerJoinListener implements Listener {
     public void onPlayerJoin(final @NonNull PlayerJoinEvent event) {
         final @NonNull Player player = event.getPlayer();
 
-        if (dataBaseProcessor.checkJoined(player)) {
+        if (dataProcessor.checkJoined(player)) {
             return;
         }
 
@@ -89,7 +89,7 @@ public class PlayerJoinListener implements Listener {
                 player.teleportAsync(QuantumLocation.toCenterHorizontalLocation(location));
                 int x = (int) location.getX();
                 int z = (int) location.getZ();
-                dataBaseProcessor.buildData(player, x, z);
+                dataProcessor.buildData(player, x, z);
             }
         }.runTask(plugin));
     }
