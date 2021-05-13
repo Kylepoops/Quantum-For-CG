@@ -23,8 +23,6 @@ public class CommandModule extends AbstractModule {
 
     private final@MonotonicNonNull PaperCommandManager<CommandSender> commandManager;
 
-    private final @MonotonicNonNull DataProcessor dataProcessor;
-
     /**
      * Constructs the CommandModule
      *
@@ -47,8 +45,6 @@ public class CommandModule extends AbstractModule {
         } catch (Exception e) {
             throw new RuntimeException("Failed to initialize the CommandManager");
         }
-
-        dataProcessor = DataProcessor.getDataProcessor();
     }
 
     @Provides
@@ -71,7 +67,7 @@ public class CommandModule extends AbstractModule {
     @Provides
     @Singleton
     public DataProcessor provideDataBaseProcessor() {
-        return this.dataProcessor;
+        return DataProcessor.getDataProcessor();
     }
 
 }

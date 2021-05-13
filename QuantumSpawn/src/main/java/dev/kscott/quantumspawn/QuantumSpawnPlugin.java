@@ -35,15 +35,17 @@ public final class QuantumSpawnPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         final @NonNull Injector injector = Guice.createInjector(
-                new CommandModule(this),
                 new PluginModule(this),
                 new QuantumModule(this),
-                new ConfigModule()
+                new ConfigModule(),
+                new CommandModule(this)
         );
+
+        config = Objects.requireNonNull(loadConfig(injector));
 
         injector.getInstance(DataCommand.class);
 
-        config = Objects.requireNonNull(loadConfig(injector));
+        this.getLogger().info(config.getDBTYPE());
 
         if (config.isSpawnOnFirstJoinEnabled()) {
             this.getServer().getPluginManager().registerEvents(injector.getInstance(PlayerJoinListener.class), this);
