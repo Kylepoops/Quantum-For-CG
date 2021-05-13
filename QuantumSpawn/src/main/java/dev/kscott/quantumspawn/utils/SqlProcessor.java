@@ -82,8 +82,9 @@ public abstract class SqlProcessor implements DataProcessor {
     public void clearData(Player player) {
         String playerName = player.getName();
         try (Connection connection = getConnection()) {
-            String sql = "DELETE FROM location WHERE player = ?";
+            String sql = "DELETE FROM location WHERE uuid = ?";
             try (PreparedStatement psmt = connection.prepareStatement(sql)) {
+                psmt.setString(1, player.getUniqueId().toString());
                 psmt.executeUpdate();
                 respawnLocationMap.remove(playerName);
             }
