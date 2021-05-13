@@ -66,6 +66,7 @@ public class LuckPermsProcessor implements DataProcessor {
             user.data().clear(NodeMatcher.metaKey("x"));
             user.data().clear(NodeMatcher.metaKey("z"));
             user.data().remove(Node.builder("sp.hasLocation").build());
+            api.getUserManager().saveUser(user);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
