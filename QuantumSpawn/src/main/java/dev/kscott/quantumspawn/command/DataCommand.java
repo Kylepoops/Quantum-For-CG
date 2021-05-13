@@ -40,6 +40,8 @@ public class DataCommand {
         this.bukkitAudiences = bukkitAudiences;
 
         this.config = config;
+
+        setupCommands();
     }
 
     public void setupCommands() {
