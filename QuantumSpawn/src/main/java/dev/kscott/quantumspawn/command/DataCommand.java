@@ -6,7 +6,6 @@ import cloud.commandframework.CommandManager;
 import cloud.commandframework.bukkit.parsers.PlayerArgument;
 import cloud.commandframework.context.CommandContext;
 import com.google.inject.Inject;
-import dev.kscott.quantumspawn.config.Config;
 import dev.kscott.quantumspawn.utils.DataProcessor;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
@@ -24,7 +23,6 @@ public class DataCommand {
     private final JavaPlugin plugin;
     private final DataProcessor dataProcessor;
     private final CommandManager<CommandSender> commandManager;
-    private final Config config;
     private final BukkitAudiences bukkitAudiences;
     private final Component PREFIX = MiniMessage.get().parse("<gray>[<color:#5bde9f>QuantumSpawn X</color:#5bde9f>]<gray>");
 
@@ -32,14 +30,11 @@ public class DataCommand {
     DataCommand(@NotNull JavaPlugin plugin,
                 @NotNull DataProcessor dataProcessor,
                 @NotNull CommandManager<CommandSender> commandManager,
-                @NonNull BukkitAudiences bukkitAudiences,
-                @NotNull Config config) {
+                @NonNull BukkitAudiences bukkitAudiences) {
         this.plugin = plugin;
         this.dataProcessor = dataProcessor;
         this.commandManager = commandManager;
         this.bukkitAudiences = bukkitAudiences;
-
-        this.config = config;
 
         setupCommands();
     }
@@ -52,12 +47,23 @@ public class DataCommand {
         );
 
         this.commandManager.command(
-                builder.literal("setlocation",
+                builder.literal(
+                "setlocation",
                 ArgumentDescription.of("set respawn location for player")
                 )
                 .permission("quantumspawn.location.set")
                 .argument(PlayerArgument.of("target"))
                 .handler(this::handleSet)
+        );
+
+        this.commandManager.command(
+                builder.literal(
+                "clearlocation",
+                ArgumentDescription.of("clear respawn location for player")
+                )
+                .permission("quantumspawn.location.clear")
+                .argument(PlayerArgument.of("target"))
+                .handler(this::handleClear)
         );
     }
 
@@ -76,7 +82,6 @@ public class DataCommand {
 
     private void handleSet(final @NonNull CommandContext<CommandSender> context) {
         CommandSender commandsender = context.getSender();
-
         if (!(commandsender instanceof Player)) {
             final TextComponent.Builder component = Component.text()
                     .append(this.PREFIX)
@@ -102,5 +107,27 @@ public class DataCommand {
                 ));
         this.bukkitAudiences.sender(commandsender).sendMessage(component);
 
+    }
+
+    private void handleClear(final @NonNull CommandContext<CommandSender> context) {
+        CommandSender commandsender = context.getSender();
+        if (!(commandsender instanceof Player)) {
+            final TextComponent.Builder component = Component.text()
+                    .append(this.PREFIX)
+                    .append(MiniMessage.get().parse(" <red>Only players can execute this command.</red>"));
+            this.bukkitAudiences.sender(commandsender).sendMessage(component);
+            return;
+        }
+
+        Player target = context.get("target");
+        dataProcessor.clearData(target);
+
+        final TextComponent.Builder component = Component.text()
+                .append(this.PREFIX)
+                .append(MiniMessage.get().parse(
+                        " <gray>Cleared Respawn Location for player</gray>"
+                                + target.getName()
+                ));
+        this.bukkitAudiences.sender(commandsender).sendMessage(component);
     }
 }
