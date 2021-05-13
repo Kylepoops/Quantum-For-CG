@@ -27,10 +27,12 @@ public class DataCommand {
     private final Component PREFIX = MiniMessage.get().parse("<gray>[<color:#5bde9f>QuantumSpawn X</color:#5bde9f>]<gray>");
 
     @Inject
-    DataCommand(@NotNull JavaPlugin plugin,
-                @NotNull DataProcessor dataProcessor,
-                @NotNull CommandManager<CommandSender> commandManager,
-                @NonNull BukkitAudiences bukkitAudiences) {
+    DataCommand(
+            @NotNull JavaPlugin plugin,
+            @NotNull DataProcessor dataProcessor,
+            @NotNull CommandManager<CommandSender> commandManager,
+            @NonNull BukkitAudiences bukkitAudiences) {
+        
         this.plugin = plugin;
         this.dataProcessor = dataProcessor;
         this.commandManager = commandManager;
