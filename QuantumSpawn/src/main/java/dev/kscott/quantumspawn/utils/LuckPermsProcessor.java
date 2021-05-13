@@ -54,17 +54,8 @@ public class LuckPermsProcessor implements DataProcessor {
 
     @Override
     public void setData(Player player, int x, int z) {
-        String playerName = player.getName();
-        try {
             clearData(player);
-            respawnLocationMap.put(playerName, new RespawnLocation(x, z));
-            User user = api.getPlayerAdapter(Player.class).getUser(player);
-            user.data().add(MetaNode.builder("x", String.valueOf(x)).build());
-            user.data().add(MetaNode.builder("z", String.valueOf(z)).build());
-            api.getUserManager().saveUser(user);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+            buildData(player, x, z);
     }
 
     @Override
@@ -74,6 +65,7 @@ public class LuckPermsProcessor implements DataProcessor {
             User user = api.getPlayerAdapter(Player.class).getUser(player);
             user.data().clear(NodeMatcher.metaKey("x"));
             user.data().clear(NodeMatcher.metaKey("z"));
+            user.data().remove(Node.builder("sp.hasLocation").build());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
