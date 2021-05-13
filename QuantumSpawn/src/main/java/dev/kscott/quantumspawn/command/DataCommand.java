@@ -1,17 +1,17 @@
 package dev.kscott.quantumspawn.command;
 
+import cloud.commandframework.ArgumentDescription;
 import cloud.commandframework.Command;
 import cloud.commandframework.CommandManager;
+import cloud.commandframework.bukkit.parsers.PlayerArgument;
 import cloud.commandframework.context.CommandContext;
 import com.google.inject.Inject;
-import dev.kscott.quantumspawn.QuantumSpawnPlugin;
 import dev.kscott.quantumspawn.config.Config;
 import dev.kscott.quantumspawn.utils.DataProcessor;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -32,15 +32,14 @@ public class DataCommand {
     DataCommand(@NotNull JavaPlugin plugin,
                 @NotNull DataProcessor dataProcessor,
                 @NotNull CommandManager<CommandSender> commandManager,
-                @NonNull BukkitAudiences bukkitAudiences) {
+                @NonNull BukkitAudiences bukkitAudiences,
+                @NotNull Config config) {
         this.plugin = plugin;
         this.dataProcessor = dataProcessor;
         this.commandManager = commandManager;
         this.bukkitAudiences = bukkitAudiences;
 
-        this.config = QuantumSpawnPlugin.getSpawnConfig();
-
-        dataProcessor = DataProcessor.getDataProcessor();
+        this.config = config;
     }
 
     public void setupCommands() {
@@ -48,6 +47,15 @@ public class DataCommand {
 
         this.commandManager.command(
                 builder.handler(this::handleMain)
+        );
+
+        this.commandManager.command(
+                builder.literal("setlocation",
+                ArgumentDescription.of("set respawn location for player")
+                )
+                .permission("quantumspawn.location.set")
+                .argument(PlayerArgument.of("target"))
+                .handler(this::handleSet)
         );
     }
 
@@ -76,7 +84,7 @@ public class DataCommand {
         }
 
         Player sender = (Player) commandsender;
-        Player target = Bukkit.getPlayer(String.valueOf(context.get("target")));
+        Player target = context.get("target");
         Location senderloc = sender.getLocation();
         int x = Integer.parseInt(String.valueOf(Math.round(senderloc.getX())));
         int z = Integer.parseInt(String.valueOf(Math.round(senderloc.getZ())));

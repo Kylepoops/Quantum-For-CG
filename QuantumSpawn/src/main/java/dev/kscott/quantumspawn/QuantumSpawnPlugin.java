@@ -2,6 +2,7 @@ package dev.kscott.quantumspawn;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import dev.kscott.quantumspawn.command.DataCommand;
 import dev.kscott.quantumspawn.config.Config;
 import dev.kscott.quantumspawn.inject.CommandModule;
 import dev.kscott.quantumspawn.inject.ConfigModule;
@@ -39,6 +40,8 @@ public final class QuantumSpawnPlugin extends JavaPlugin {
                 new QuantumModule(this),
                 new ConfigModule()
         );
+
+        injector.getInstance(DataCommand.class);
 
         config = Objects.requireNonNull(loadConfig(injector));
 
