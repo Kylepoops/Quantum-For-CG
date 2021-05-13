@@ -32,7 +32,7 @@ public class DataCommand {
             @NotNull DataProcessor dataProcessor,
             @NotNull CommandManager<CommandSender> commandManager,
             @NonNull BukkitAudiences bukkitAudiences) {
-        
+
         this.plugin = plugin;
         this.dataProcessor = dataProcessor;
         this.commandManager = commandManager;
