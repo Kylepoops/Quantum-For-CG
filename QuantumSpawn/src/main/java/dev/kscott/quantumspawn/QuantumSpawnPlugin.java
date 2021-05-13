@@ -14,6 +14,7 @@ import dev.kscott.quantumspawn.utils.MySQLProcessor;
 import dev.kscott.quantumspawn.utils.SqlProcessor;
 import dev.kscott.quantumspawn.utils.SqliteProcessor;
 import org.bstats.bukkit.Metrics;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -45,26 +46,33 @@ public final class QuantumSpawnPlugin extends JavaPlugin {
 
         injector.getInstance(DataCommand.class);
 
-        this.getLogger().info(config.getDBTYPE());
-
         if (config.isSpawnOnFirstJoinEnabled()) {
             this.getServer().getPluginManager().registerEvents(injector.getInstance(PlayerJoinListener.class), this);
-            this.getLogger().info("Random spawn on first join is enabled!");
+            Bukkit.getLogger().info("[QuantumSpawn X] Random spawn on first join is enabled!");
         }
 
         if (config.isSpawnOnDeathEnabled()) {
             this.getServer().getPluginManager().registerEvents(injector.getInstance(PlayerDeathListener.class), this);
-            this.getLogger().info("Random spawn on death is enabled!");
+            Bukkit.getLogger().info("[QuantumSpawn X] Random spawn on death is enabled!");
         }
 
-        if (config.getDBTYPE().equals("sqlite")) {
-            SqlProcessor sqliteProcessor = new SqliteProcessor();
-            sqliteProcessor.setSqlConnectionPoll();
-            sqliteProcessor.checkDatabase();
-        } else if (config.getDBTYPE().equals("mysql")) {
-            SqlProcessor MySQLProcess = new MySQLProcessor();
-            MySQLProcess.setSqlConnectionPoll();
-            MySQLProcess.checkDatabase();
+        switch (config.getDBTYPE()) {
+            case "sqlite" :
+                SqlProcessor sqliteProcessor = new SqliteProcessor();
+                sqliteProcessor.setSqlConnectionPoll();
+                sqliteProcessor.checkDatabase();
+                Bukkit.getLogger().info("[QuantumSpawn X] Setup Sqlite data processor");
+                break;
+            case "mysql" :
+                SqlProcessor MySQLProcess = new MySQLProcessor();
+                MySQLProcess.setSqlConnectionPoll();
+                MySQLProcess.checkDatabase();
+                Bukkit.getLogger().info("[QuantumSpawn X] Setup MySQL data processor");
+                break;
+            case "luckperms" :
+            default :
+                Bukkit.getLogger().info("[QuantumSpawn X] Setup LuckPerms data processor");
+                break;
         }
 
 
