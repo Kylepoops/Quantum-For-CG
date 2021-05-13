@@ -48,22 +48,22 @@ public class DataCommand {
 
         this.commandManager.command(
                 builder.literal(
-                "setlocation",
-                ArgumentDescription.of("set respawn location for player")
+                        "setlocation",
+                        ArgumentDescription.of("set respawn location for player")
                 )
-                .permission("quantumspawn.location.set")
-                .argument(PlayerArgument.of("target"))
-                .handler(this::handleSet)
+                        .permission("quantumspawn.location.set")
+                        .argument(PlayerArgument.of("target"))
+                        .handler(this::handleSet)
         );
 
         this.commandManager.command(
                 builder.literal(
-                "clearlocation",
-                ArgumentDescription.of("clear respawn location for player")
+                        "clearlocation",
+                        ArgumentDescription.of("clear respawn location for player")
                 )
-                .permission("quantumspawn.location.clear")
-                .argument(PlayerArgument.of("target"))
-                .handler(this::handleClear)
+                        .permission("quantumspawn.location.clear")
+                        .argument(PlayerArgument.of("target"))
+                        .handler(this::handleClear)
         );
     }
 
@@ -81,16 +81,11 @@ public class DataCommand {
     }
 
     private void handleSet(final @NonNull CommandContext<CommandSender> context) {
-        CommandSender commandsender = context.getSender();
-        if (!(commandsender instanceof Player)) {
-            final TextComponent.Builder component = Component.text()
-                    .append(this.PREFIX)
-                    .append(MiniMessage.get().parse(" <red>Only players can execute this command.</red>"));
-            this.bukkitAudiences.sender(commandsender).sendMessage(component);
+        if (!(checkSender(context))) {
             return;
         }
 
-        Player sender = (Player) commandsender;
+        Player sender = (Player) context.getSender();
         Player target = context.get("target");
         Location senderloc = sender.getLocation();
         int x = Integer.parseInt(String.valueOf(Math.round(senderloc.getX())));
@@ -105,17 +100,12 @@ public class DataCommand {
                                 + ", Z:" + z
                                 + "}"
                 ));
-        this.bukkitAudiences.sender(commandsender).sendMessage(component);
+        this.bukkitAudiences.sender(sender).sendMessage(component);
 
     }
 
     private void handleClear(final @NonNull CommandContext<CommandSender> context) {
-        CommandSender commandsender = context.getSender();
-        if (!(commandsender instanceof Player)) {
-            final TextComponent.Builder component = Component.text()
-                    .append(this.PREFIX)
-                    .append(MiniMessage.get().parse(" <red>Only players can execute this command.</red>"));
-            this.bukkitAudiences.sender(commandsender).sendMessage(component);
+        if (!(checkSender(context))) {
             return;
         }
 
@@ -128,6 +118,18 @@ public class DataCommand {
                         " <gray>Cleared Respawn Location for player</gray>"
                                 + target.getName()
                 ));
+        this.bukkitAudiences.sender(context.getSender()).sendMessage(component);
+    }
+
+    private boolean checkSender(final @NonNull CommandContext<CommandSender> context) {
+        CommandSender commandsender = context.getSender();
+        if (commandsender instanceof Player) {
+            return true;
+        }
+        final TextComponent.Builder component = Component.text()
+                .append(this.PREFIX)
+                .append(MiniMessage.get().parse(" <red>Only players can execute this command.</red>"));
         this.bukkitAudiences.sender(commandsender).sendMessage(component);
+        return false;
     }
 }
