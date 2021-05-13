@@ -3,6 +3,7 @@ package dev.kscott.quantumspawn;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import dev.kscott.quantumspawn.config.Config;
+import dev.kscott.quantumspawn.inject.CommandModule;
 import dev.kscott.quantumspawn.inject.ConfigModule;
 import dev.kscott.quantumspawn.inject.PluginModule;
 import dev.kscott.quantumspawn.inject.QuantumModule;
@@ -33,6 +34,7 @@ public final class QuantumSpawnPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         final @NonNull Injector injector = Guice.createInjector(
+                new CommandModule(this),
                 new PluginModule(this),
                 new QuantumModule(this),
                 new ConfigModule()
