@@ -18,7 +18,7 @@ public abstract class SqlProcessor implements DataProcessor {
         try {
             return sqlConnectionPool.getConnection();
         } catch (SQLException e) {
-            Bukkit.getLogger().warning("[QuantumSpawn] Failed to connect to database");
+            Bukkit.getLogger().warning("[QuantumSpawn X] Failed to connect to database");
             return null;
         }
     }
@@ -30,7 +30,7 @@ public abstract class SqlProcessor implements DataProcessor {
                 ps.executeUpdate();
             }
         } catch (SQLException e) {
-            Bukkit.getLogger().warning("[QuantumSpawn] Failed to check database");
+            Bukkit.getLogger().warning("[QuantumSpawn X] Failed to check database");
             e.printStackTrace();
         }
 
@@ -65,7 +65,7 @@ public abstract class SqlProcessor implements DataProcessor {
                 psmt.setInt(3, z);
                 psmt.executeUpdate();
                 respawnLocationMap.put(playerName, new RespawnLocation(x, z));
-                Bukkit.getLogger().info("[QuantumSpawn] Generated Database table for " + playerName + ": {X=" + x + ", Z=" + z + "}");
+                Bukkit.getLogger().info("[QuantumSpawn X] Generated Database table for " + playerName + ": {X=" + x + ", Z=" + z + "}");
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
