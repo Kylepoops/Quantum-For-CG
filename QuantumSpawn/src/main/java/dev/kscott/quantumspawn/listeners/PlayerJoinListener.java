@@ -6,9 +6,6 @@ import dev.kscott.quantum.location.QuantumLocation;
 import dev.kscott.quantum.rule.ruleset.QuantumRuleset;
 import dev.kscott.quantumspawn.config.Config;
 import dev.kscott.quantumspawn.utils.DataProcessor;
-import dev.kscott.quantumspawn.utils.LuckPermsProcessor;
-import dev.kscott.quantumspawn.utils.MySQLProcessor;
-import dev.kscott.quantumspawn.utils.SqliteProcessor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -56,18 +53,7 @@ public class PlayerJoinListener implements Listener {
         this.plugin = plugin;
         this.locationProvider = locationProvider;
 
-        switch (config.getDBTYPE()) {
-            case "sqlite" :
-                dataProcessor = new SqliteProcessor();
-                break;
-            case "mysql" :
-                dataProcessor = new MySQLProcessor();
-                break;
-            case "luckperms" :
-            default :
-                dataProcessor = new LuckPermsProcessor();
-                break;
-        }
+        dataProcessor = DataProcessor.getDataProcessor();
     }
 
     @EventHandler

@@ -8,12 +8,7 @@ import cloud.commandframework.tasks.TaskRecipe;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import dev.kscott.quantumspawn.QuantumSpawnPlugin;
-import dev.kscott.quantumspawn.config.Config;
 import dev.kscott.quantumspawn.utils.DataProcessor;
-import dev.kscott.quantumspawn.utils.LuckPermsProcessor;
-import dev.kscott.quantumspawn.utils.MySQLProcessor;
-import dev.kscott.quantumspawn.utils.SqliteProcessor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -53,20 +48,7 @@ public class CommandModule extends AbstractModule {
             throw new RuntimeException("Failed to initialize the CommandManager");
         }
 
-        @MonotonicNonNull Config config = QuantumSpawnPlugin.getSpawnConfig();
-
-        switch (config.getDBTYPE()) {
-            case "sqlite" :
-                dataProcessor = new SqliteProcessor();
-                break;
-            case "mysql" :
-                dataProcessor = new MySQLProcessor();
-                break;
-            case "luckperms" :
-            default :
-                dataProcessor = new LuckPermsProcessor();
-                break;
-        }
+        dataProcessor = DataProcessor.getDataProcessor();
     }
 
     @Provides

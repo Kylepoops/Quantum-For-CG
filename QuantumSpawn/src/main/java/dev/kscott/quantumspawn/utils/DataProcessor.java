@@ -1,5 +1,6 @@
 package dev.kscott.quantumspawn.utils;
 
+import dev.kscott.quantumspawn.QuantumSpawnPlugin;
 import dev.kscott.quantumspawn.data.RespawnLocation;
 import org.bukkit.entity.Player;
 
@@ -21,5 +22,17 @@ public interface DataProcessor {
     void setData(Player player, int x, int z);
 
     void clearData(Player player);
+
+    static DataProcessor getDataProcessor() {
+        switch (QuantumSpawnPlugin.getSpawnConfig().getDBTYPE()) {
+            case "mysql" :
+                return new MySQLProcessor();
+            case "luckperms" :
+                return new LuckPermsProcessor();
+            default :
+            case "sqlite" :
+                return new SqliteProcessor();
+        }
+    }
 
 }
