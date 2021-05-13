@@ -260,7 +260,7 @@ public class LocationProvider {
 
                         this.timer.addTime(searchTime);
                     } else {
-                        findLocation(tries + 1, start, quantumRuleset, cf);
+                        findLocation(tries + 1, start, quantumRuleset, cf, MaxX, MinX, MaxZ, MinZ);
                     }
 
                     return state;
