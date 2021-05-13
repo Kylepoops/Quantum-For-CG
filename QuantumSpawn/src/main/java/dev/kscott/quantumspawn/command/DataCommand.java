@@ -96,7 +96,7 @@ public class DataCommand {
         final TextComponent.Builder component = Component.text()
                 .append(this.PREFIX)
                 .append(MiniMessage.get().parse(
-                        " <gray>Set Respawn Location for player</gray>"
+                        " <gray>Set Respawn Location for player</gray> "
                                 + target.getName()
                                 + ": {X:" + x
                                 + ", Z:" + z
@@ -117,7 +117,7 @@ public class DataCommand {
         final TextComponent.Builder component = Component.text()
                 .append(this.PREFIX)
                 .append(MiniMessage.get().parse(
-                        " <gray>Cleared Respawn Location for player</gray>"
+                        " <gray>Cleared Respawn Location for player</gray> "
                                 + target.getName()
                 ));
         this.bukkitAudiences.sender(context.getSender()).sendMessage(component);
