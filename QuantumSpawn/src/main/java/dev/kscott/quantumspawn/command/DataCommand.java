@@ -83,11 +83,15 @@ public class DataCommand {
     }
 
     private void handleSet(final @NonNull CommandContext<CommandSender> context) {
-        if (!(checkSender(context))) {
-            return;
+        CommandSender commandsender = context.getSender();
+        if (!(commandsender instanceof Player)) {
+            final TextComponent.Builder component = Component.text()
+                    .append(this.PREFIX)
+                    .append(MiniMessage.get().parse(" <red>Only players can execute this command.</red>"));
+            this.bukkitAudiences.sender(commandsender).sendMessage(component);
         }
 
-        Player sender = (Player) context.getSender();
+        Player sender = (Player) commandsender;
         Player target = context.get("target");
         Location senderloc = sender.getLocation();
         int x = Integer.parseInt(String.valueOf(Math.round(senderloc.getX())));
@@ -107,9 +111,6 @@ public class DataCommand {
     }
 
     private void handleClear(final @NonNull CommandContext<CommandSender> context) {
-        if (!(checkSender(context))) {
-            return;
-        }
 
         Player target = context.get("target");
         dataProcessor.clearData(target);
@@ -121,17 +122,5 @@ public class DataCommand {
                                 + target.getName()
                 ));
         this.bukkitAudiences.sender(context.getSender()).sendMessage(component);
-    }
-
-    private boolean checkSender(final @NonNull CommandContext<CommandSender> context) {
-        CommandSender commandsender = context.getSender();
-        if (commandsender instanceof Player) {
-            return true;
-        }
-        final TextComponent.Builder component = Component.text()
-                .append(this.PREFIX)
-                .append(MiniMessage.get().parse(" <red>Only players can execute this command.</red>"));
-        this.bukkitAudiences.sender(commandsender).sendMessage(component);
-        return false;
     }
 }
