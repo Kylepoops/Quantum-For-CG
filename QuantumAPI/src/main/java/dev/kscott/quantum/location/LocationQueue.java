@@ -32,7 +32,7 @@ public class LocationQueue {
      * Constructs {@link LocationQueue}.
      *
      * @param locationProvider {@link LocationProvider} reference.
-     * @param rulesetRegistry  {@link RulesetRegistry} reference.
+     * @param rulesetRegistry {@link RulesetRegistry} reference.
      */
     public LocationQueue(
             final @NonNull LocationProvider locationProvider,
@@ -123,5 +123,4 @@ public class LocationQueue {
     public @NonNull Map<QuantumRuleset, Queue<QuantumLocation>> getLocationMap() {
         return ImmutableMap.copyOf(this.locationQueueMap);
     }
-
 }
