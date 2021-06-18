@@ -6,6 +6,7 @@ api-version: 1.16
 description: A comprehensive random spawning plugin using the Quantum API.
 depend:
   - QuantumAPI
+softdepend:
   - LuckPerms
 permissions:
   sp.x:
